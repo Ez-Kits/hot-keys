@@ -1,0 +1,22 @@
+{
+	"extends": "../../tsconfig.json",
+	"compilerOptions": {
+		"paths": {
+			"src/*": ["./src/*"]
+		},
+		"baseUrl": "./",
+		"outDir": "./dist",
+		"target": "ES2015",
+		"module": "ES2015",
+		"allowJs": false,
+		"declaration": true,
+		"preserveSymlinks": true,
+		"isolatedModules": true,
+		"strict": true,
+		"moduleResolution": "Bundler",
+		"emitDeclarationOnly": true,
+		"noEmit": false
+	},
+	"exclude": ["dist"],
+	"include": ["src", "__tests__/**/*"]
+}

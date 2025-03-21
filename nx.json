@@ -1,0 +1,10 @@
+{
+	"extends": "nx/presets/npm.json",
+	"$schema": "./node_modules/nx/schemas/nx-schema.json",
+	"nxCloudAccessToken": "ZDMyODBiMDktN2U1My00ZThhLWI2OTgtZDYwNDFjNWQ1YjExfHJlYWQtd3JpdGU=",
+	"targetDefaults": {
+		"build": {
+			"dependsOn": ["^build"]
+		}
+	}
+}

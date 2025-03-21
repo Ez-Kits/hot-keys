@@ -1,0 +1,36 @@
+{
+	"name": "@ez-kits/hot-keys-solid",
+	"version": "0.0.0",
+	"description": "Register and handle hot keys in ez-way",
+	"repository": "https://github.com/Ez-Kits/hot-keys",
+	"author": "Niku",
+	"license": "MIT",
+	"private": false,
+	"main": "./dist/index.cjs",
+	"module": "./dist/index.mjs",
+	"types": "./dist/index.d.ts",
+	"typings": "./dist/index.d.ts",
+	"publishConfig": {
+		"access": "public"
+	},
+	"files": [
+		"dist"
+	],
+	"scripts": {
+		"dev": "tsup --watch",
+		"build": "tsup"
+	},
+	"peerDependencies": {
+		"solid-js": "^1.8.12"
+	},
+	"devDependencies": {
+		"@types/node": "^20.4.2",
+		"solid-js": "^1.8.12",
+		"tsup": "^7.1.0",
+		"tsup-preset-solid": "^2.2.0",
+		"typescript": "^5.3.3"
+	},
+	"dependencies": {
+		"@ez-kits/hot-keys-core": "*"
+	}
+}

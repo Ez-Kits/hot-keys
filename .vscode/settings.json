@@ -1,0 +1,19 @@
+{
+	"editor.formatOnSave": true,
+	"editor.formatOnPaste": true,
+	"typescript.preferences.importModuleSpecifier": "non-relative",
+	"files.eol": "\n",
+	"html.autoClosingTags": true,
+	"javascript.autoClosingTags": true,
+	"typescript.autoClosingTags": true,
+	"javascript.suggest.autoImports": true,
+	"typescript.suggest.autoImports": true,
+	"javascript.updateImportsOnFileMove.enabled": "always",
+	"typescript.updateImportsOnFileMove.enabled": "always",
+	"editor.codeActionsOnSave": {
+		"source.organizeImports": "explicit",
+		"source.fixAll.eslint": "explicit"
+	},
+	"eslint.validate": ["javascript"],
+	"typescript.tsdk": "node_modules/typescript/lib"
+}

@@ -1,0 +1,23 @@
+{
+	"name": "ez-hot-keys",
+	"version": "0.0.0",
+	"license": "MIT",
+	"scripts": {
+		"nx": "nx",
+		"build": "nx run-many --projects=packages/** --target=build --parallel=6",
+		"dev": "nx run-many --projects=packages/** --target=dev --parallel=6",
+		"publish-packages": "node scripts/publish.js"
+	},
+	"private": true,
+	"dependencies": {},
+	"devDependencies": {
+		"@nx/js": "18.0.0",
+		"nx": "18.0.0",
+		"fast-glob": "^3.3.1"
+	},
+	"workspaces": [
+		"packages/*",
+		"examples/*"
+	],
+	"packageManager": "yarn@1.22.17"
+}

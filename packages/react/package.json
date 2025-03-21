@@ -1,0 +1,39 @@
+{
+	"name": "@ez-kits/hot-keys-react",
+	"version": "0.0.0",
+	"description": "Register and handle hot keys in ez-way",
+	"repository": "https://github.com/Ez-Kits/hot-keys",
+	"author": "Niku",
+	"license": "MIT",
+	"private": false,
+	"main": "./dist/index.cjs",
+	"module": "./dist/index.mjs",
+	"types": "./dist/index.d.ts",
+	"typings": "./dist/index.d.ts",
+	"publishConfig": {
+		"access": "public"
+	},
+	"files": [
+		"dist"
+	],
+	"scripts": {
+		"dev": "tsup --watch",
+		"build": "tsup"
+	},
+	"peerDependencies": {
+		"react": "^18.2.0",
+		"react-dom": "^18.2.0"
+	},
+	"devDependencies": {
+		"react": "^18.2.0",
+		"react-dom": "^18.2.0",
+		"@types/react": "^18.2.52",
+		"@types/react-dom": "^18.2.18",
+		"@types/node": "^20.4.2",
+		"tsup": "^7.1.0",
+		"typescript": "^5.3.3"
+	},
+	"dependencies": {
+		"@ez-kits/hot-keys-core": "*"
+	}
+}
