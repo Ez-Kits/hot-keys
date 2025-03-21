@@ -21,6 +21,7 @@ Register and handle hot keys in ez-way
 ## ✨ Features
 
 **Agnostics:** Core of Ez Hot Keys is wrote with Vanilla Javascript. Supports `Vue`, `React` and `Solid`.
+
 **Sequently:** User can press keys sequently or pressing all keys at once. Like, press `Ctrl` then `A` is same `Ctrl+A`.
 
 ## Documentation
@@ -28,4 +29,4 @@ Register and handle hot keys in ez-way
 Still in progress...
 
 Please checkout folder `examples`.
-<br>x
+<br>
