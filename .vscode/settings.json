@@ -15,5 +15,11 @@
 		"source.fixAll.eslint": "explicit"
 	},
 	"eslint.validate": ["javascript"],
-	"typescript.tsdk": "node_modules/typescript/lib"
+	"typescript.tsdk": "node_modules/typescript/lib",
+	"json.schemas": [
+		{
+			"fileMatch": ["**/docs/*/config.json"],
+			"url": "https://raw.githubusercontent.com/Ez-Kits/ez-kits/refs/heads/main/app/schemas/framwork-config.schema.json?token=GHSAT0AAAAAADAO2WWBMIXEWF2H6ZOE5B6IZ7AB3OQ"
+		}
+	]
 }
