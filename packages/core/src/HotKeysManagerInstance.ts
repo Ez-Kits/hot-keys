@@ -1,15 +1,17 @@
 import { HotKeyScopeInstance } from "src/HotKeyScopeInstance";
+import { SeparateSequencesAndCombinationDelegate } from "src/SeparateSequencesAndCombinationDelegate";
 import {
+	IHotKeyDelegate,
 	IHotKeyScopeInstance,
 	IHotKeysManagerInstance,
 	IHotKeysManagerOptions,
 } from "src/types";
-import { debounce, normalizeKey } from "src/ultilities";
+import { UnifiedSequencesAndCombinationDelegate } from "src/UnifiedSequencesAndCombinationDelegate";
 
 export class HotKeysManagerInstance implements IHotKeysManagerInstance {
 	private scopes: Map<string, IHotKeyScopeInstance>;
 	private eventAbortController: AbortController;
-	private pressedKeys: string[];
+	private delegate: IHotKeyDelegate;
 
 	activeScope?: string;
 	globalScope: IHotKeyScopeInstance;
@@ -19,17 +21,22 @@ export class HotKeysManagerInstance implements IHotKeysManagerInstance {
 		this.scopes = new Map();
 		this.globalScope = new HotKeyScopeInstance("__PRIVATE_GLOBAL_SCOPE__");
 		this.eventAbortController = new AbortController();
-		this.pressedKeys = [];
+		this.delegate = this.getDelegate();
 	}
 
 	updateOptions(options: Partial<IHotKeysManagerOptions>): void {
 		const isElementChanged =
 			options.getElement?.() !== this.options.getElement?.();
+		const isModeChanged = options.mode !== this.options.mode;
 
 		this.options = {
 			...this.options,
 			...options,
 		};
+
+		if (isModeChanged) {
+			this.delegate = this.getDelegate();
+		}
 
 		if (isElementChanged) {
 			this.unregisterListener();
@@ -81,8 +88,16 @@ export class HotKeysManagerInstance implements IHotKeysManagerInstance {
 				capture: true,
 				signal: this.eventAbortController.signal,
 			});
+			element.addEventListener("keyup", this.handleKeyUp, {
+				capture: true,
+				signal: this.eventAbortController.signal,
+			});
 		} else {
 			document.addEventListener("keydown", this.handleKeyDown, {
+				capture: true,
+				signal: this.eventAbortController.signal,
+			});
+			document.addEventListener("keyup", this.handleKeyUp, {
 				capture: true,
 				signal: this.eventAbortController.signal,
 			});
@@ -106,75 +121,28 @@ export class HotKeysManagerInstance implements IHotKeysManagerInstance {
 		this.unregisterListener();
 	}
 
-	private resetKeyboardEventState() {
-		this.pressedKeys = [];
+	private getDelegate(): IHotKeyDelegate {
+		const mode = this.options.mode || "separate";
+		if (mode === "separate") {
+			return new SeparateSequencesAndCombinationDelegate(
+				this.globalScope,
+				this.options
+			);
+		}
+
+		return new UnifiedSequencesAndCombinationDelegate(
+			this.globalScope,
+			this.options
+		);
 	}
 
-	private resetKeyboardEventStateDebounce = debounce(
-		() => this.resetKeyboardEventState(),
-		1000
-	);
+	handleKeyDown = (e: KeyboardEvent): void => {
+		this.delegate.changeScope(this.getActiveScope());
+		this.delegate.handleKeyDown(e);
+	};
 
-	private handleKeyDown = (e: KeyboardEvent): void => {
-		if (e.repeat || e.defaultPrevented) {
-			return;
-		}
-
-		const activeScope = this.getActiveScope();
-		this.resetKeyboardEventStateDebounce();
-
-		const lastKey = this.pressedKeys[this.pressedKeys.length - 1];
-		const normalizedKey = normalizeKey(e.key);
-		if (lastKey !== normalizedKey) {
-			this.pressedKeys.push(normalizedKey);
-		}
-
-		const hotKey = this.pressedKeys.join("+");
-
-		const node = activeScope.searchNodeByHotKey(hotKey);
-
-		if (node) {
-			if (node.handler) {
-				if (this.options.stopPropagation) {
-					e.stopPropagation();
-				}
-				if (this.options.preventDefault) {
-					e.preventDefault();
-				}
-
-				node.handler(hotKey, e);
-				this.resetKeyboardEventState();
-				return;
-			}
-		}
-
-		// If the active scope is not the global scope, check if the hotkey is registered in the global scope
-		if (activeScope !== this.globalScope) {
-			const globalScopeNode = this.globalScope.searchNodeByHotKey(hotKey);
-			if (globalScopeNode) {
-				if (globalScopeNode.handler) {
-					if (this.options.stopPropagation) {
-						e.stopPropagation();
-					}
-					if (this.options.preventDefault) {
-						e.preventDefault();
-					}
-
-					globalScopeNode.handler(hotKey, e);
-					this.resetKeyboardEventState();
-					return;
-				}
-				return;
-			}
-
-			if (!node && !globalScopeNode) {
-				this.resetKeyboardEventState();
-				return;
-			}
-		}
-
-		if (!node) {
-			this.resetKeyboardEventState();
-		}
+	handleKeyUp = (e: KeyboardEvent): void => {
+		this.delegate.changeScope(this.getActiveScope());
+		this.delegate.handleKeyUp?.(e);
 	};
 }

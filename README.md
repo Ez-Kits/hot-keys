@@ -3,7 +3,7 @@
 </p>
 
 <p align="center">
-Register and handle hot keys in ez-way
+Register and handle hot keys in ez-way.
 </p>
 
 <p align="center">
@@ -22,11 +22,19 @@ Register and handle hot keys in ez-way
 
 **Agnostics:** Core of Ez Hot Keys is wrote with Vanilla Javascript. Supports `Vue`, `React` and `Solid`.
 
-**Sequently:** User can press keys sequently or pressing all keys at once. Like, press `Ctrl` then `A` is same `Ctrl+A`.
+**Sequently:** User can press keys sequently. Like, press `Ctrl` then `A`.
+
+**Combination:** User can press keys combination. Like, press `Ctrl+A`.
+
+**Global:** User can register global hot keys. Example: press `Ctrl+A` to do something.
+
+**Scope:** User can register scope hot keys. Example: press `Ctrl+A` in a specific element to do something.
+
+**Mode:** Supports two modes of hot keys: `separate` or `unified`.
 
 ## Documentation
 
-Still in progress...
+We're working on the documentation.
 
-Please checkout folder `examples`.
+At meantime, please checkout folder `examples`.
 <br>
