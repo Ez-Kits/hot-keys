@@ -32,6 +32,15 @@ export function normalizeKey(key: string): string {
 	}
 }
 
+export function normalizeHotKey(hotKey: string): string[] {
+	return hotKey.split("_").map((x) =>
+		x
+			.split("+")
+			.map((y) => normalizeKey(y))
+			.join("+")
+	);
+}
+
 export function registerHotKeys(
 	hotKeyManager: IHotKeysManagerInstance,
 	scope: string,

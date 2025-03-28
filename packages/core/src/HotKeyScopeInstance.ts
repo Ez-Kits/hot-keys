@@ -1,4 +1,4 @@
-import { normalizeKey } from "src/ultilities";
+import { normalizeHotKey } from "src/ultilities";
 import {
 	HotKeyHandler,
 	IHotKeyNode,
@@ -16,16 +16,35 @@ export class HotKeyScopeInstance implements IHotKeyScopeInstance {
 		const rootNode = { nodes: new Map() };
 		this.scope = {
 			root: rootNode,
+			currentNode: rootNode,
 		};
 	}
 
+	getRootNode(): IHotKeyNode {
+		return this.scope.root;
+	}
+
+	setCurrentNode(node: IHotKeyNode): void {
+		this.scope.currentNode = node;
+	}
+
+	getCurrentNode(): IHotKeyNode {
+		return this.scope.currentNode;
+	}
+
+	resetCurrentNode(): void {
+		this.scope.currentNode = this.scope.root;
+	}
+
 	addHotKey(hotKey: string, callback: HotKeyHandler): void {
-		const normalizedHotKey = this.normalizeHotKey(hotKey);
+		const normalizedHotKey = normalizeHotKey(hotKey);
 		let node = this.scope.root;
 
 		for (const key of normalizedHotKey) {
 			if (!node.nodes.has(key)) {
 				node.nodes.set(key, { nodes: new Map() });
+			} else {
+				console.warn(`HotKey ${hotKey} already exists`);
 			}
 
 			node = node.nodes.get(key)!;
@@ -35,7 +54,7 @@ export class HotKeyScopeInstance implements IHotKeyScopeInstance {
 	}
 
 	removeHotKey(hotKey: string): void {
-		const normalizedHotKey = this.normalizeHotKey(hotKey);
+		const normalizedHotKey = normalizeHotKey(hotKey);
 
 		let workingNode: IHotKeyNode = this.scope.root;
 		const chain: IHotKeyNode[] = [];
@@ -80,13 +99,30 @@ export class HotKeyScopeInstance implements IHotKeyScopeInstance {
 	}
 
 	searchNodeByHotKey(hotKey: string): IHotKeyNode | undefined {
-		let currentNode = this.scope.root;
+		let currentNode = this.getCurrentNode();
 
 		if (!currentNode) {
 			return undefined;
 		}
 
-		const normalizedHotKey = this.normalizeHotKey(hotKey);
+		const normalizedHotKey = normalizeHotKey(hotKey);
+
+		for (const key of normalizedHotKey) {
+			const node = currentNode.nodes.get(key);
+			if (!node) {
+				return undefined;
+			}
+
+			currentNode = node;
+		}
+
+		return currentNode;
+	}
+
+	searchNodeByHotKeyFromRoot(hotKey: string): IHotKeyNode | undefined {
+		let currentNode = this.scope.root;
+
+		const normalizedHotKey = normalizeHotKey(hotKey);
 
 		for (const key of normalizedHotKey) {
 			const node = currentNode.nodes.get(key);
@@ -102,9 +138,5 @@ export class HotKeyScopeInstance implements IHotKeyScopeInstance {
 
 	isEmptyHotKey(): boolean {
 		return this.scope.root.nodes.size === 0;
-	}
-
-	private normalizeHotKey(hotKey: string): string[] {
-		return hotKey.split("+").map(normalizeKey);
 	}
 }
