@@ -1,0 +1,51 @@
+{
+	"sidebar": [
+		{
+			"text": "Getting Started",
+			"children": [
+				{
+					"text": "Introduction",
+					"slug": "/react/getting-started/introduction"
+				},
+				{
+					"text": "Installation",
+					"slug": "/react/getting-started/installation"
+				},
+				{
+					"text": "Usage",
+					"slug": "/react/getting-started/usage"
+				}
+			]
+		},
+		{
+			"text": "Components",
+			"children": [
+				{
+					"text": "HotKeysManager",
+					"slug": "/react/components/hotkeys-manager"
+				}
+			]
+		},
+		{
+			"text": "Hooks",
+			"children": [
+				{
+					"text": "useHotKeys",
+					"slug": "/react/hooks/use-hotkeys"
+				},
+				{
+					"text": "useHotKeysScope",
+					"slug": "/react/hooks/use-hotkeys-scope"
+				},
+				{
+					"text": "useActivateHotKeysScope",
+					"slug": "/react/hooks/use-activate-hotkeys-scope"
+				},
+				{
+					"text": "useGlobalHotKeys",
+					"slug": "/react/hooks/use-global-hotkeys"
+				}
+			]
+		}
+	]
+}
