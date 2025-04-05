@@ -5,15 +5,15 @@
 			"children": [
 				{
 					"text": "Introduction",
-					"slug": "/react/getting-started/introduction"
+					"slug": "/getting-started/introduction"
 				},
 				{
 					"text": "Installation",
-					"slug": "/react/getting-started/installation"
+					"slug": "/getting-started/installation"
 				},
 				{
 					"text": "Usage",
-					"slug": "/react/getting-started/usage"
+					"slug": "/getting-started/usage"
 				}
 			]
 		},
@@ -22,7 +22,7 @@
 			"children": [
 				{
 					"text": "HotKeysManager",
-					"slug": "/react/components/hotkeys-manager"
+					"slug": "/components/hotkeys-manager"
 				}
 			]
 		},
@@ -31,19 +31,19 @@
 			"children": [
 				{
 					"text": "useHotKeys",
-					"slug": "/react/hooks/use-hotkeys"
+					"slug": "/hooks/use-hotkeys"
 				},
 				{
 					"text": "useHotKeysScope",
-					"slug": "/react/hooks/use-hotkeys-scope"
+					"slug": "/hooks/use-hotkeys-scope"
 				},
 				{
 					"text": "useActivateHotKeysScope",
-					"slug": "/react/hooks/use-activate-hotkeys-scope"
+					"slug": "/hooks/use-activate-hotkeys-scope"
 				},
 				{
 					"text": "useGlobalHotKeys",
-					"slug": "/react/hooks/use-global-hotkeys"
+					"slug": "/hooks/use-global-hotkeys"
 				}
 			]
 		}
