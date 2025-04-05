@@ -1,0 +1,51 @@
+{
+	"sidebar": [
+		{
+			"text": "Getting Started",
+			"children": [
+				{
+					"text": "Introduction",
+					"slug": "/getting-started/introduction"
+				},
+				{
+					"text": "Installation",
+					"slug": "/getting-started/installation"
+				},
+				{
+					"text": "Usage",
+					"slug": "/getting-started/usage"
+				}
+			]
+		},
+		{
+			"text": "Components",
+			"children": [
+				{
+					"text": "HotKeysManager",
+					"slug": "/components/hotkeys-manager"
+				}
+			]
+		},
+		{
+			"text": "Hooks",
+			"children": [
+				{
+					"text": "useHotKeys",
+					"slug": "/hooks/use-hotkeys"
+				},
+				{
+					"text": "useHotKeysScope",
+					"slug": "/hooks/use-hotkeys-scope"
+				},
+				{
+					"text": "useActivateHotKeysScope",
+					"slug": "/hooks/use-activate-hotkeys-scope"
+				},
+				{
+					"text": "useGlobalHotKeys",
+					"slug": "/hooks/use-global-hotkeys"
+				}
+			]
+		}
+	]
+}

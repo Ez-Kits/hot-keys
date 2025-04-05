@@ -1,0 +1,51 @@
+{
+	"sidebar": [
+		{
+			"text": "Getting Started",
+			"children": [
+				{
+					"text": "Introduction",
+					"slug": "/vue/getting-started/introduction"
+				},
+				{
+					"text": "Installation",
+					"slug": "/vue/getting-started/installation"
+				},
+				{
+					"text": "Usage",
+					"slug": "/vue/getting-started/usage"
+				}
+			]
+		},
+		{
+			"text": "Components",
+			"children": [
+				{
+					"text": "HotKeysManager",
+					"slug": "/vue/components/hotkeys-manager"
+				}
+			]
+		},
+		{
+			"text": "Composables",
+			"children": [
+				{
+					"text": "useHotKeys",
+					"slug": "/vue/composables/use-hotkeys"
+				},
+				{
+					"text": "useHotKeysScope",
+					"slug": "/vue/composables/use-hotkeys-scope"
+				},
+				{
+					"text": "useActivateHotKeysScope",
+					"slug": "/vue/composables/use-activate-hotkeys-scope"
+				},
+				{
+					"text": "useGlobalHotKeys",
+					"slug": "/vue/composables/use-global-hotkeys"
+				}
+			]
+		}
+	]
+}
