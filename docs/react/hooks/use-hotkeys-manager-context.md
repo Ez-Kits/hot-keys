@@ -1,6 +1,6 @@
 ---
 title: useHotKeysManagerContext
-description: useHotKeysManagerContext hook is used to get the `HotKeysManager` instance.
+description: useHotKeysManagerContext hook is used to get the HotKeysManager instance.
 ---
 
 ## Usage
