@@ -1,6 +1,6 @@
 ---
 title: useActivateHotKeysScope
-description: `useActivateHotKeysScope` is a hook that allows you to activate and manage a specific hot key scope within your React components. This hook helps you control when certain keyboard shortcuts are active based on component lifecycle and conditions.
+description: useActivateHotKeysScope is a hook that allows you to activate and manage a specific hot key scope within your React components. This hook helps you control when certain keyboard shortcuts are active based on component lifecycle and conditions.
 ---
 
 ## Usage

@@ -1,6 +1,6 @@
 ---
 title: Introduction
-description: **Ez Hot Keys** is a powerful and flexible keyboard shortcut library designed specifically for React applications. It provides an intuitive way to handle keyboard shortcuts and hotkeys in your React components, making your applications more accessible and user-friendly.
+description: Ez Hot Keys is a powerful and flexible keyboard shortcut library designed specifically for React applications. It provides an intuitive way to handle keyboard shortcuts and hotkeys in your React components, making your applications more accessible and user-friendly.
 ---
 
 ## Key Features

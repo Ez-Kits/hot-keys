@@ -1,6 +1,6 @@
 ---
 title: HotKeysManager
-description: `HotKeysManager` is a React component that manages keyboard shortcuts (hot keys) and it's scopes in your application. It provides a context for managing different scopes of shortcuts.
+description: HotKeysManager is a React component that manages keyboard shortcuts (hot keys) and it's scopes in your application. It provides a context for managing different scopes of shortcuts.
 ---
 
 ## Usage
