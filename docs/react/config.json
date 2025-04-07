@@ -1,0 +1,62 @@
+{
+	"sidebar": [
+		{
+			"text": "Getting Started",
+			"icon": "material-symbols-light-motion-play-outline",
+			"children": [
+				{
+					"text": "Introduction",
+					"slug": "/getting-started/introduction"
+				},
+				{
+					"text": "Installation",
+					"slug": "/getting-started/installation"
+				},
+				{
+					"text": "Concepts",
+					"slug": "/getting-started/concepts"
+				},
+				{
+					"text": "Usage",
+					"slug": "/getting-started/usage"
+				}
+			]
+		},
+		{
+			"text": "Components",
+			"icon": "material-symbols-play-shapes-outline-rounded",
+			"children": [
+				{
+					"text": "HotKeysManager",
+					"slug": "/components/hotkeys-manager"
+				}
+			]
+		},
+		{
+			"text": "Hooks",
+			"icon": "mdi-hook",
+			"children": [
+				{
+					"text": "useHotKeys",
+					"slug": "/hooks/use-hotkeys"
+				},
+				{
+					"text": "useHotKeysScope",
+					"slug": "/hooks/use-hotkeys-scope"
+				},
+				{
+					"text": "useActivateHotKeysScope",
+					"slug": "/hooks/use-activate-hotkeys-scope"
+				},
+				{
+					"text": "useGlobalHotKeys",
+					"slug": "/hooks/use-global-hotkeys"
+				},
+				{
+					"text": "useHotKeysManagerContext",
+					"slug": "/hooks/use-hotkeys-manager-context"
+				}
+			]
+		}
+	]
+}
