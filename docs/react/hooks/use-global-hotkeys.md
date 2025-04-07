@@ -1,9 +1,7 @@
 ---
 title: useGlobalHotKeys
-description: useGlobalHotKeys hook.
+description: useGlobalHotKeys hook allows you to register global keyboard shortcuts (hot keys) in your React application. These shortcuts will work regardless of which element has focus in your application.
 ---
-
-`useGlobalHotKeys` is a hook that allows you to register global keyboard shortcuts (hot keys) in your React application. These shortcuts will work regardless of which element has focus in your application.
 
 ## Usage
 
@@ -51,7 +49,7 @@ function MyComponent() {
 }
 ```
 
-## Types
+## Props & Types
 
 ```typescript
 interface UseGlobalHotKeysOptions {

@@ -5,9 +5,7 @@ description: Usage of Ez Hot Keys for React.
 
 ## Basic Usage
 
-Firstly, you have to wrap your app with `HotKeysManager` component.
-
-Then, you can use `useHotKeysScope` hook to register a hot keys scope.
+You can use `useHotKeysScope` hook to register a hot keys scope.
 
 ```tsx filename="App.tsx"
 import { HotKeysManager, useHotKeysScope } from "@ez-kits/hot-keys-react";
@@ -82,20 +80,75 @@ useHotKeysScope({
 
 ## Hot Keys Scope Activator
 
-The `getActivatorElement` function is used to get the element that will be used to activate the hot keys scope. You should use with options `triggers`.
+**Ez Hot Keys** only handle hot keys in the scope that is activated. There is only one active scope at a time.
+
+There are three ways to activate a scope:
+
+### `useActivateHotKeysScope`
+
+If you only want to activate the scope but not register any hot keys, you can use `useActivateHotKeysScope` hook.
 
 ```tsx
-useHotKeysScope({
-	scopeName: "test",
-	triggers: ["focus", "hover"],
-	autoFocus: true,
-	getActivatorElement: () => elementRef.current,
-});
+import { useActivateHotKeysScope } from "@ez-kits/hot-keys-react";
+
+function MyComponent() {
+	const elementRef = useRef<HTMLDivElement>(null);
+
+	useActivateHotKeysScope({
+		scopeName: "test",
+		triggers: ["focus", "hover"],
+		autoFocus: true,
+		getActivatorElement: () => elementRef.current,
+	});
+
+	return <div ref={elementRef}>Press some hotkeys!</div>;
+}
+```
+
+The `getActivatorElement` function is used to get the element that will be used to activate the hot keys scope. Option `triggers` is used to specify the triggers that will be used to activate the scope. Current supported triggers are `focus` and `hover`.
+
+### `useHotKeysScope`
+
+If you want to register hot keys and activate a scope at the same time, you can use `useHotKeysScope` hook, then pass the `getActivatorElement` function, `triggers` and `autoFocus` to the hook, just like `useActivateHotKeysScope`.
+
+```tsx
+import { useHotKeysScope } from "@ez-kits/hot-keys-react";
+
+function MyComponent() {
+	const elementRef = useRef<HTMLDivElement>(null);
+
+	useHotKeysScope({
+		scopeName: "test",
+		triggers: ["focus", "hover"],
+		autoFocus: true,
+		getActivatorElement: () => elementRef.current,
+	});
+
+	return <div ref={elementRef}>Press some hotkeys!</div>;
+}
+```
+
+### `useHotKeysManagerContext`
+
+You can also use `useHotKeysManagerContext` hook to activate a scope.
+
+```tsx
+import { useHotKeysManagerContext } from "@ez-kits/hot-keys-react";
+
+function MyComponent() {
+	const hotKeysManager = useHotKeysManagerContext();
+
+	// Activate the scope
+	hotKeysManager.activateScope("test");
+
+	// Deactivate current active scope
+	hotKeysManager.deactivateScope();
+}
 ```
 
 ## Global Hot Keys
 
-The `useGlobalHotKeys` hook is used to handle global hot keys.
+The `useGlobalHotKeys` hook is used to register global hot keys.
 
 ```tsx
 import { useGlobalHotKeys } from "@ez-kits/hot-keys-react";
@@ -109,3 +162,7 @@ useGlobalHotKeys({
 	},
 });
 ```
+
+:::alert{type="warning"}
+**Global hot keys** are only be handled when no scope handle the hot key.
+:::

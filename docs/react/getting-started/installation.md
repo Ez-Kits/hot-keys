@@ -3,7 +3,9 @@ title: Installation
 description: Installation of Ez Hot Keys for React.
 ---
 
-Ez Hot Keys for React can be installed using your preferred package manager. Choose one of the following methods:
+## Install Dependencies
+
+**Ez Hot Keys** can be installed using your preferred package manager. Choose one of the following methods:
 
 ```bash
 # npm
@@ -14,4 +16,26 @@ yarn add @ez-kits/hot-keys-react
 
 # pnpm
 pnpm add @ez-kits/hot-keys-react
+```
+
+## Setup
+
+All main features of **Ez Hot Keys** are available in the `HotKeysManager` component. To use **Ez Hot Keys**, you need to wrap your application with the `HotKeysManager` component.
+
+```tsx
+import { HotKeysManager } from "@ez-kits/hot-keys-react";
+import { createRoot, StrictMode } from "react";
+
+function App() {
+	return <div>My Application</div>;
+}
+
+const root = createRoot(document.getElementById("root") as HTMLElement);
+root.render(
+	<StrictMode>
+		<HotKeysManager>
+			<App />
+		</HotKeysManager>
+	</StrictMode>
+);
 ```

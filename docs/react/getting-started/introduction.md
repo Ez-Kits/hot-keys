@@ -1,19 +1,18 @@
 ---
 title: Introduction
-description: Introduction to Ez Hot Keys for React.
+description: **Ez Hot Keys** is a powerful and flexible keyboard shortcut library designed specifically for React applications. It provides an intuitive way to handle keyboard shortcuts and hotkeys in your React components, making your applications more accessible and user-friendly.
 ---
-
-# Introduction
-
-Ez Hot Keys is a powerful and flexible keyboard shortcut library designed specifically for React applications. It provides an intuitive way to handle keyboard shortcuts and hotkeys in your React components, making your applications more accessible and user-friendly.
 
 ## Key Features
 
-- 🚀 **Simple API**: Easy to integrate with minimal boilerplate code
-- ⚡ **Lightweight**: Small bundle size with zero dependencies
-- 🎯 **Type-safe**: Written in TypeScript for better development experience
-- 🔧 **Customizable**: Flexible configuration options for your specific needs
-- 🎹 **Rich Key Combinations**: Support for single keys, key combinations, and sequences
+- **Simple API**: Easy to integrate with minimal boilerplate code
+- **Lightweight**: Small bundle size with zero dependencies
+- **Customizable**: Flexible configuration options for your specific needs.
+- **Sequences:** User can press keys sequentially. Like, press `Ctrl` then `A`.
+- **Combinations:** User can press keys combination. Like, press `Ctrl+A`.
+- **Global:** User can register global hot keys. Example: press `Ctrl+A` to do something.
+- **Scope:** User can register scope hot keys. Example: press `Ctrl+A` in a specific element to do something.
+- **Mode:** Supports two modes of hot keys: `separate` or `unified`.
 
 ## Why Ez Hot Keys?
 

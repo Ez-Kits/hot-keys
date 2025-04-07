@@ -1,21 +1,27 @@
 ---
 title: HotKeysManager
-description: HotKeysManager component.
+description: `HotKeysManager` is a React component that manages keyboard shortcuts (hot keys) and it's scopes in your application. It provides a context for managing different scopes of shortcuts.
 ---
-
-The `HotKeysManager` is a React component that manages keyboard shortcuts (hot keys) and their scopes in your application. It provides a context for handling keyboard events and managing different scopes of shortcuts.
 
 ## Usage
 
-```tsx filename="App.tsx"
+```tsx
 import { HotKeysManager } from "@ez-kits/hot-keys-react";
+import { createRoot } from "react-dom/client";
 
 function App() {
-	return <HotKeysManager>{/* Your application components */}</HotKeysManager>;
+	return <div>{/* Your application components */}</div>;
 }
+
+const root = createRoot(document.getElementById("root") as HTMLElement);
+root.render(
+	<HotKeysManager>
+		<App />
+	</HotKeysManager>
+);
 ```
 
-### Props & Types
+## Props & Types
 
 ```ts
 interface IHotKeysManagerOptions {

@@ -20,17 +20,15 @@ Register and handle hot keys in ez-way.
 
 ## ✨ Features
 
-**Agnostics:** Core of Ez Hot Keys is wrote with Vanilla Javascript. Supports `Vue`, `React` and `Solid`.
-
-**Sequently:** User can press keys sequently. Like, press `Ctrl` then `A`.
-
-**Combination:** User can press keys combination. Like, press `Ctrl+A`.
-
-**Global:** User can register global hot keys. Example: press `Ctrl+A` to do something.
-
-**Scope:** User can register scope hot keys. Example: press `Ctrl+A` in a specific element to do something.
-
-**Mode:** Supports two modes of hot keys: `separate` or `unified`.
+- **Agnostics:** Core of Ez Hot Keys is wrote with Vanilla Javascript. Supports `Vue`, `React` and `Solid`.
+- **Simple API**: Easy to integrate with minimal boilerplate code
+- **Lightweight**: Small bundle size with zero dependencies
+- **Customizable**: Flexible configuration options for your specific needs.
+- **Sequences:** User can press keys sequentially. Like, press `Ctrl` then `A`.
+- **Combinations:** User can press keys combination. Like, press `Ctrl+A`.
+- **Global:** User can register global hot keys. Example: press `Ctrl+A` to do something.
+- **Scope:** User can register scope hot keys. Example: press `Ctrl+A` in a specific element to do something.
+- **Mode:** Supports two modes of hot keys: `separate` or `unified`.
 
 ## Documentation
 

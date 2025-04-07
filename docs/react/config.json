@@ -2,6 +2,7 @@
 	"sidebar": [
 		{
 			"text": "Getting Started",
+			"icon": "material-symbols-light-motion-play-outline",
 			"children": [
 				{
 					"text": "Introduction",
@@ -12,6 +13,10 @@
 					"slug": "/getting-started/installation"
 				},
 				{
+					"text": "Concepts",
+					"slug": "/getting-started/concepts"
+				},
+				{
 					"text": "Usage",
 					"slug": "/getting-started/usage"
 				}
@@ -19,6 +24,7 @@
 		},
 		{
 			"text": "Components",
+			"icon": "material-symbols-play-shapes-outline-rounded",
 			"children": [
 				{
 					"text": "HotKeysManager",
@@ -28,6 +34,7 @@
 		},
 		{
 			"text": "Hooks",
+			"icon": "mdi-hook",
 			"children": [
 				{
 					"text": "useHotKeys",
@@ -44,6 +51,10 @@
 				{
 					"text": "useGlobalHotKeys",
 					"slug": "/hooks/use-global-hotkeys"
+				},
+				{
+					"text": "useHotKeysManagerContext",
+					"slug": "/hooks/use-hotkeys-manager-context"
 				}
 			]
 		}

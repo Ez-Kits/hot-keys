@@ -1,9 +1,7 @@
 ---
 title: useHotKeysScope
-description: useHotKeysScope hook.
+description: useHotKeysScope hook allows you to register and manage keyboard shortcuts (hot keys) within a specific scope in your application.
 ---
-
-The `useHotKeysScope` hook allows you to register and manage keyboard shortcuts (hot keys) within a specific scope in your application.
 
 ## Usage
 
