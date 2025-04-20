@@ -3,17 +3,21 @@ title: Concepts
 description: Concepts of Ez Hot Keys for React.
 ---
 
+# Concepts
+
+Before you start using **Ez Hot Keys**, you should understand the following concepts:
+
 ## Hot Keys Manager
 
 The `HotKeysManager` is a React component that manages hot keys (keyboard shortcuts) and hot keys scopes in your application. It provides a context for managing different scopes of hot keys.
 
 ## Hot Keys Scope
 
-Ez Hot Keys manages hot keys in scopes. Each hot key is associated with a scope. You can register a hot keys scope with hooks: `useHotKeysScope`.
+**Ez Hot Keys** manages hot keys in scopes. Each hot key is associated with a scope. You can register a hot keys scope with hooks: `useHotKeysScope`.
 
 ## Active Scope
 
-The active scope is the scope that is currently active. There is only one active scope at a time. Ez Hot Keys will only trigger the hot keys of the active scope.
+The active scope is the scope that is currently active. There is only one active scope at a time. **Ez Hot Keys** will only trigger the hot keys of the active scope.
 
 ## Global Hot Keys
 
@@ -51,7 +55,7 @@ useHotKeysScope({
 
 ## Modes
 
-Ez Hot Keys has two modes to handle hot keys:
+**Ez Hot Keys** has two modes to handle hot keys:
 
 - `separate`: Sequences hot keys and combinations will be handled separately. Example: `ctrl_s` is different from `ctrl+s`.
 - `unified`: Sequences hot keys and combinations will be handled in the same way. Example: `ctrl_s` is the same as `ctrl+s`.

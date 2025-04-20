@@ -3,6 +3,10 @@ title: Installation
 description: Installation of Ez Hot Keys for React.
 ---
 
+# Installation
+
+In this page, we will guide you through the installation process of **Ez Hot Keys** for React.
+
 ## Install Dependencies
 
 **Ez Hot Keys** can be installed using your preferred package manager. Choose one of the following methods:
