@@ -3,7 +3,7 @@ import {
 	IHotKeyDelegateOptions,
 	IHotKeyScopeInstance,
 } from "src/types";
-import { debounce, normalizeKey } from "src/ultilities";
+import { debounce, getKeyFromEvent, normalizeKey } from "src/ultilities";
 
 export class SeparateSequencesAndCombinationDelegate
 	implements IHotKeyDelegate
@@ -39,7 +39,7 @@ export class SeparateSequencesAndCombinationDelegate
 	);
 
 	handleKeyDown = (e: KeyboardEvent): void => {
-		if (e.repeat || e.defaultPrevented || !this.activeScope) {
+		if (e.repeat || e.defaultPrevented) {
 			return;
 		}
 
@@ -47,18 +47,20 @@ export class SeparateSequencesAndCombinationDelegate
 		this.resetKeyboardEventStateDebounce();
 
 		const lastKey = this.pressedKeys[this.pressedKeys.length - 1];
-		const normalizedKey = normalizeKey(e.key);
+		const normalizedKey = normalizeKey(getKeyFromEvent(e));
 		if (lastKey !== normalizedKey) {
 			this.pressedKeys.push(normalizedKey);
 		}
 
 		const hotKey = this.pressedKeys.join("+");
 
-		const chainNode = activeScope.searchNodeByHotKey(hotKey);
-		const combinedNode = activeScope.searchNodeByHotKeyFromRoot(hotKey);
+		const chainNode = activeScope?.searchNodeByHotKey(hotKey);
+		const combinedNode = activeScope?.searchNodeByHotKeyFromRoot(hotKey);
+
 		const node = chainNode || combinedNode;
 
 		if (node) {
+			activeScope?.setCurrentNode(node);
 			if (node.handler) {
 				if (this.options.stopPropagation) {
 					e.stopPropagation();
@@ -68,19 +70,24 @@ export class SeparateSequencesAndCombinationDelegate
 				}
 
 				node.handler(hotKey, e);
+
 				if (node.nodes.size === 0) {
 					this.resetKeyboardEventState();
 				}
 				return;
 			}
-
-			activeScope.setCurrentNode(node);
 		}
 
 		// If the active scope is not the global scope, check if the hotkey is registered in the global scope
 		if (activeScope !== this.globalScope) {
-			const globalScopeNode = this.globalScope.searchNodeByHotKey(hotKey);
+			const globalScopeChainNode = this.globalScope.searchNodeByHotKey(hotKey);
+			const globalScopeCombinedNode =
+				this.globalScope.searchNodeByHotKeyFromRoot(hotKey);
+
+			const globalScopeNode = globalScopeChainNode || globalScopeCombinedNode;
+
 			if (globalScopeNode) {
+				this.globalScope.setCurrentNode(globalScopeNode);
 				if (globalScopeNode.handler) {
 					if (this.options.stopPropagation) {
 						e.stopPropagation();
@@ -94,8 +101,6 @@ export class SeparateSequencesAndCombinationDelegate
 						this.resetKeyboardEventState();
 					}
 					return;
-				} else {
-					this.globalScope.setCurrentNode(globalScopeNode);
 				}
 				return;
 			}

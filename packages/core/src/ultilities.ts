@@ -11,6 +11,19 @@ export function debounce(fn: () => void, milliseconds: number) {
 	};
 }
 
+export function getKeyFromEvent(e: KeyboardEvent): string {
+	const keyCode = e.keyCode || e.which || e.charCode;
+
+	if (
+		(keyCode && keyCode >= 65 && keyCode <= 90) ||
+		(keyCode >= 97 && keyCode <= 122)
+	) {
+		return String.fromCharCode(keyCode).toLowerCase();
+	}
+
+	return e.key.toLowerCase().trim();
+}
+
 export function normalizeKey(key: string): string {
 	const lowerCaseKey = key.toLowerCase().trim();
 
