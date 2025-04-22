@@ -5,7 +5,7 @@ import {
 	IHotKeyNode,
 	IHotKeyScopeInstance,
 } from "src/types";
-import { debounce, normalizeKey } from "src/ultilities";
+import { debounce, getKeyFromEvent, normalizeKey } from "src/ultilities";
 
 export class UnifiedSequencesAndCombinationDelegate implements IHotKeyDelegate {
 	private pressedKeys: string[] = [];
@@ -37,7 +37,7 @@ export class UnifiedSequencesAndCombinationDelegate implements IHotKeyDelegate {
 	);
 
 	handleKeyDown = (e: KeyboardEvent): void => {
-		if (e.repeat || e.defaultPrevented || !this.activeScope) {
+		if (e.repeat || e.defaultPrevented) {
 			return;
 		}
 
@@ -45,14 +45,16 @@ export class UnifiedSequencesAndCombinationDelegate implements IHotKeyDelegate {
 		this.resetKeyboardEventStateDebounce();
 
 		const lastKey = this.pressedKeys[this.pressedKeys.length - 1];
-		const normalizedKey = normalizeKey(e.key);
+		const normalizedKey = normalizeKey(getKeyFromEvent(e));
 		if (lastKey !== normalizedKey) {
 			this.pressedKeys.push(normalizedKey);
 		}
 
 		const hotKey = this.pressedKeys.join("+");
 
-		const node = this.searchNodeByHotKey(activeScope, hotKey);
+		const node = activeScope
+			? this.searchNodeByHotKey(activeScope, hotKey)
+			: undefined;
 
 		if (node) {
 			if (node.handler) {
