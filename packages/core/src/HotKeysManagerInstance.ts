@@ -151,7 +151,7 @@ export class HotKeysManagerInstance implements IHotKeysManagerInstance {
 	}
 
 	handleKeyDown = (e: KeyboardEvent): void => {
-		if (this.options.enabled !== false) {
+		if (this.options.enabled === false) {
 			return;
 		}
 
@@ -160,7 +160,7 @@ export class HotKeysManagerInstance implements IHotKeysManagerInstance {
 	};
 
 	handleKeyUp = (e: KeyboardEvent): void => {
-		if (this.options.enabled !== false) {
+		if (this.options.enabled === false) {
 			return;
 		}
 

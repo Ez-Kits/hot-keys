@@ -50,6 +50,7 @@ export class HotKeyScopeInstance implements IHotKeyScopeInstance {
 
 		if (typeof hotKeyInput === "function") {
 			node.handler = hotKeyInput;
+			node.hotKey = hotKey;
 		} else {
 			node.hotKey = hotKey;
 			node.enabled = hotKeyInput.enabled;
