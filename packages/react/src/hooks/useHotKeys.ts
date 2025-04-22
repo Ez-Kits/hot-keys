@@ -1,12 +1,12 @@
 import {
 	registerHotKeysFromRecord,
-	type HotKeyHandler,
+	type IHotKeyInput,
 } from "@ez-kits/hot-keys-core";
 import { useEffect } from "react";
 import { useHotKeysManagerContext } from "src/hooks";
 
 export interface UseHotKeysOptions {
-	hotKeys: Record<string, HotKeyHandler>;
+	hotKeys: Record<string, IHotKeyInput>;
 	/**
 	 * The separator of the hotkeys
 	 * @default ","

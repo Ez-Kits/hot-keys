@@ -1,5 +1,6 @@
 import { HotKeysManagerInstance } from "src/HotKeysManagerInstance";
 import { IHotKeyScopeActivatorOptions } from "src/types";
+import { isServer } from "src/ultilities";
 
 export class HotKeyScopeActivator {
 	private eventAbortController?: AbortController;
@@ -35,6 +36,15 @@ export class HotKeyScopeActivator {
 	mount() {
 		this.addEventListeners();
 		this.focusElement();
+
+		// If the element is already the active element or contains the active element, activate the scope
+		if (this.shouldFocusElement() && !isServer()) {
+			const element = this.options.getActivatorElement();
+			const activeElement = document.activeElement;
+			if (element === activeElement || element?.contains(activeElement)) {
+				this.hotKeysManager.activateScope(this.options.scopeName);
+			}
+		}
 
 		return () => {
 			this.unmount();
@@ -138,14 +148,18 @@ export class HotKeyScopeActivator {
 
 	private focusElement() {
 		const element = this.options.getActivatorElement();
-		if (
-			!element ||
-			!this.options.autoFocus ||
-			!this.options.triggers.includes("focus")
-		) {
+		if (!this.shouldFocusElement() || !element) {
 			return;
 		}
 
 		element.focus();
+	}
+
+	private shouldFocusElement() {
+		return (
+			this.options.getActivatorElement() &&
+			this.options.autoFocus &&
+			this.options.triggers.includes("focus")
+		);
 	}
 }

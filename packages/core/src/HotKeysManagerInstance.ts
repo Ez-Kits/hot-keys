@@ -6,6 +6,7 @@ import {
 	IHotKeysManagerInstance,
 	IHotKeysManagerOptions,
 } from "src/types";
+import { isServer } from "src/ultilities";
 import { UnifiedSequencesAndCombinationDelegate } from "src/UnifiedSequencesAndCombinationDelegate";
 
 export class HotKeysManagerInstance implements IHotKeysManagerInstance {
@@ -37,6 +38,7 @@ export class HotKeysManagerInstance implements IHotKeysManagerInstance {
 		if (isModeChanged) {
 			this.delegate = this.getDelegate();
 		}
+		this.delegate.updateOptions(options);
 
 		if (isElementChanged) {
 			this.unregisterListener();
@@ -79,7 +81,19 @@ export class HotKeysManagerInstance implements IHotKeysManagerInstance {
 		return this.globalScope;
 	}
 
+	disable(): void {
+		this.options.enabled = false;
+	}
+
+	enable(): void {
+		this.options.enabled = true;
+	}
+
 	registerListener(): void {
+		if (isServer()) {
+			return;
+		}
+
 		this.eventAbortController = new AbortController();
 		const element = this.options.getElement?.();
 
@@ -137,11 +151,19 @@ export class HotKeysManagerInstance implements IHotKeysManagerInstance {
 	}
 
 	handleKeyDown = (e: KeyboardEvent): void => {
+		if (this.options.enabled === false) {
+			return;
+		}
+
 		this.delegate.changeScope(this.getActiveScope());
 		this.delegate.handleKeyDown(e);
 	};
 
 	handleKeyUp = (e: KeyboardEvent): void => {
+		if (this.options.enabled === false) {
+			return;
+		}
+
 		this.delegate.changeScope(this.getActiveScope());
 		this.delegate.handleKeyUp?.(e);
 	};

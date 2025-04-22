@@ -1,6 +1,4 @@
-import { HotKeyHandler } from "src/types";
-
-import { IHotKeysManagerInstance } from "src/types";
+import { IHotKeyInput, IHotKeysManagerInstance } from "src/types";
 
 export function debounce(fn: () => void, milliseconds: number) {
 	let timeoutId: NodeJS.Timeout | undefined;
@@ -9,6 +7,10 @@ export function debounce(fn: () => void, milliseconds: number) {
 		clearTimeout(timeoutId);
 		timeoutId = setTimeout(fn, milliseconds);
 	};
+}
+
+export function isServer(): boolean {
+	return typeof window === "undefined";
 }
 
 export function getKeyFromEvent(e: KeyboardEvent): string {
@@ -35,6 +37,9 @@ export function normalizeKey(key: string): string {
 		case "option":
 			return "alt";
 		case "cmd":
+		case "command":
+		case "win":
+		case "windows":
 			return "meta";
 		case "return":
 			return "enter";
@@ -54,12 +59,48 @@ export function normalizeHotKey(hotKey: string): string[] {
 	);
 }
 
+export function isEditableElement(eventTarget: EventTarget | null): boolean {
+	if (!eventTarget) {
+		return false;
+	}
+
+	if (!(eventTarget instanceof HTMLElement)) {
+		return false;
+	}
+
+	if (eventTarget instanceof HTMLInputElement) {
+		return (
+			!eventTarget.type ||
+			[
+				"email",
+				"number",
+				"password",
+				"search",
+				"tel",
+				"text",
+				"url",
+				"date",
+				"datetime-local",
+				"month",
+				"time",
+				"week",
+			].includes(eventTarget.type.toLowerCase())
+		);
+	}
+
+	if (eventTarget instanceof HTMLTextAreaElement) {
+		return true;
+	}
+
+	return eventTarget.isContentEditable;
+}
+
 export function registerHotKeys(
 	hotKeyManager: IHotKeysManagerInstance,
 	scope: string,
 	hotKeysString: string,
 	hotKeysSeparator: string,
-	handler: HotKeyHandler
+	input: IHotKeyInput
 ) {
 	const scopeInstance = hotKeyManager.registerScope(scope);
 	const hotKeys = hotKeysString
@@ -67,7 +108,7 @@ export function registerHotKeys(
 		.map((hotKey) => hotKey.trim());
 
 	hotKeys.forEach((hotKey) => {
-		scopeInstance.addHotKey(hotKey, handler);
+		scopeInstance.addHotKey(hotKey, input);
 	});
 
 	return () => {
@@ -81,12 +122,12 @@ export function registerHotKeys(
 export function registerHotKeysFromRecord(
 	hotKeysManager: IHotKeysManagerInstance,
 	scope: string,
-	hotKeys: Record<string, HotKeyHandler>,
+	hotKeys: Record<string, IHotKeyInput>,
 	hotKeysSeparator: string
 ) {
 	const hotKeysPairs = Object.entries(hotKeys);
-	const unRegisterHotKeys = hotKeysPairs.map(([hotKey, handler]) =>
-		registerHotKeys(hotKeysManager, scope, hotKey, hotKeysSeparator, handler)
+	const unRegisterHotKeys = hotKeysPairs.map(([hotKey, input]) =>
+		registerHotKeys(hotKeysManager, scope, hotKey, hotKeysSeparator, input)
 	);
 
 	return () => {
@@ -98,7 +139,7 @@ export function registerGlobalHotKeys(
 	hotKeyManager: IHotKeysManagerInstance,
 	hotKeysString: string,
 	hotKeysSeparator: string,
-	handler: HotKeyHandler
+	input: IHotKeyInput
 ) {
 	const scopeInstance = hotKeyManager.globalScope;
 	const hotKeys = hotKeysString
@@ -106,7 +147,7 @@ export function registerGlobalHotKeys(
 		.map((hotKey) => hotKey.trim());
 
 	hotKeys.forEach((hotKey) => {
-		scopeInstance.addHotKey(hotKey, handler);
+		scopeInstance.addHotKey(hotKey, input);
 	});
 
 	return () => {
@@ -118,12 +159,12 @@ export function registerGlobalHotKeys(
 
 export function registerGlobalHotKeysFromRecord(
 	hotKeysManager: IHotKeysManagerInstance,
-	hotKeys: Record<string, HotKeyHandler>,
+	hotKeys: Record<string, IHotKeyInput>,
 	hotKeysSeparator: string
 ) {
 	const hotKeysPairs = Object.entries(hotKeys);
-	const unRegisterHotKeys = hotKeysPairs.map(([hotKey, handler]) =>
-		registerGlobalHotKeys(hotKeysManager, hotKey, hotKeysSeparator, handler)
+	const unRegisterHotKeys = hotKeysPairs.map(([hotKey, input]) =>
+		registerGlobalHotKeys(hotKeysManager, hotKey, hotKeysSeparator, input)
 	);
 
 	return () => {

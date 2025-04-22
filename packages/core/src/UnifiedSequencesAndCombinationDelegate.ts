@@ -1,20 +1,35 @@
+import { Logger } from "src/Logger";
 import {
-	HotKeyHandler,
 	IHotKeyDelegate,
 	IHotKeyDelegateOptions,
+	IHotKeyInfo,
 	IHotKeyNode,
 	IHotKeyScopeInstance,
 } from "src/types";
-import { debounce, getKeyFromEvent, normalizeKey } from "src/ultilities";
+import {
+	debounce,
+	getKeyFromEvent,
+	isEditableElement,
+	normalizeKey,
+} from "src/ultilities";
 
-export class UnifiedSequencesAndCombinationDelegate implements IHotKeyDelegate {
+interface IFlattenNode extends IHotKeyInfo {
+	computedHotKey: string;
+}
+
+export class UnifiedSequencesAndCombinationDelegate
+	extends Logger
+	implements IHotKeyDelegate
+{
 	private pressedKeys: string[] = [];
 	private activeScope: IHotKeyScopeInstance | undefined;
 
 	constructor(
 		private readonly globalScope: IHotKeyScopeInstance,
-		private options: IHotKeyDelegateOptions
-	) {}
+		protected options: IHotKeyDelegateOptions
+	) {
+		super(options);
+	}
 
 	changeScope(scope: IHotKeyScopeInstance): void {
 		this.activeScope = scope;
@@ -57,7 +72,21 @@ export class UnifiedSequencesAndCombinationDelegate implements IHotKeyDelegate {
 			: undefined;
 
 		if (node) {
+			if (
+				node.enabled === false ||
+				(node.ignoreInput !== false && isEditableElement(e.target))
+			) {
+				return this.resetKeyboardEventState();
+			}
+
 			if (node.handler) {
+				this.debugLog("Key Down - Found Hot Key", "green", () => {
+					console.log("Hot key", hotKey);
+					console.log("Active Scope", activeScope?.name);
+					console.log("Node", node);
+					this.logKeyboardEventInfo(e);
+				});
+
 				if (this.options.stopPropagation) {
 					e.stopPropagation();
 				}
@@ -65,7 +94,7 @@ export class UnifiedSequencesAndCombinationDelegate implements IHotKeyDelegate {
 					e.preventDefault();
 				}
 
-				node.handler(hotKey, e);
+				node.handler(node.hotKey || hotKey, e);
 				this.resetKeyboardEventState();
 				return;
 			}
@@ -75,7 +104,21 @@ export class UnifiedSequencesAndCombinationDelegate implements IHotKeyDelegate {
 		if (activeScope !== this.globalScope) {
 			const globalScopeNode = this.searchNodeByHotKey(this.globalScope, hotKey);
 			if (globalScopeNode) {
+				if (
+					globalScopeNode.enabled === false ||
+					(globalScopeNode.ignoreInput !== false && isEditableElement(e.target))
+				) {
+					return this.resetKeyboardEventState();
+				}
+
 				if (globalScopeNode.handler) {
+					this.debugLog("Key Down - Found Global Hot Key", "green", () => {
+						console.log("Hot key", hotKey);
+						console.log("Active Scope", activeScope?.name);
+						console.log("Node", globalScopeNode);
+						this.logKeyboardEventInfo(e);
+					});
+
 					if (this.options.stopPropagation) {
 						e.stopPropagation();
 					}
@@ -83,63 +126,59 @@ export class UnifiedSequencesAndCombinationDelegate implements IHotKeyDelegate {
 						e.preventDefault();
 					}
 
-					globalScopeNode.handler(hotKey, e);
+					globalScopeNode.handler(globalScopeNode.hotKey || hotKey, e);
 					this.resetKeyboardEventState();
-					return;
 				}
 				return;
 			}
 		}
+
+		this.debugLog("Key Down - Found No Hot Key", "red", () => {
+			console.log("Hot key", hotKey);
+			console.log("Active Scope", activeScope?.name);
+			this.logKeyboardEventInfo(e);
+		});
 	};
 
 	private searchNodeByHotKey(
 		scope: IHotKeyScopeInstance,
 		hotKey: string
-	): { key: string; handler: HotKeyHandler } | undefined {
+	): IFlattenNode | undefined {
 		let currentNode = scope.getRootNode();
 
 		if (!currentNode) {
 			return undefined;
 		}
 
-		for (const { key, handler } of this.flattenNodes(currentNode)) {
-			if (hotKey.endsWith(key)) {
-				return { key, handler };
+		for (const node of this.flattenNodes(currentNode)) {
+			if (hotKey.endsWith(node.computedHotKey)) {
+				return node;
 			}
 		}
 
 		return undefined;
 	}
 
-	private flattenNodes(
-		node: IHotKeyNode,
-		prefix = ""
-	): { key: string; handler: HotKeyHandler }[] {
-		const nodes: { key: string; handler: HotKeyHandler }[] = [];
+	private flattenNodes(node: IHotKeyNode, prefix = ""): IFlattenNode[] {
+		const nodes: IFlattenNode[] = [];
 		for (const [key, childNode] of node.nodes.entries()) {
 			const computedKey = `${prefix}${key}`;
 			if (childNode.handler) {
-				nodes.push({ key: computedKey, handler: childNode.handler });
+				nodes.push({ ...childNode, computedHotKey: computedKey });
 			}
 			nodes.push(...this.flattenNodes(childNode, `${computedKey}+`));
 		}
 		return nodes;
 	}
 
-	private createHotKeyNode(
-		nodes: { key: string; handler: HotKeyHandler }[]
-	): IHotKeyNode {
-		const node: IHotKeyNode = {
-			nodes: new Map(),
-		};
-
-		for (const { key, handler } of nodes) {
-			node.nodes.set(key, {
-				nodes: new Map(),
-				handler,
-			});
-		}
-
-		return node;
+	logKeyboardEventInfo(e: KeyboardEvent) {
+		console.log("Key", e.key);
+		console.log("Key code", e.keyCode || e.which || e.charCode);
+		this.debugLog("Modifier keys", "blue", () => {
+			console.log("Meta key", e.metaKey);
+			console.log("Alt key", e.altKey);
+			console.log("Shift key", e.shiftKey);
+			console.log("Control key", e.ctrlKey);
+		});
 	}
 }
