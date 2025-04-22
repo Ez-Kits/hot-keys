@@ -1,4 +1,4 @@
-import { registerHotKeys, type HotKeyHandler } from "@ez-kits/hot-keys-core";
+import { registerHotKeys, type IHotKeyInput } from "@ez-kits/hot-keys-core";
 import { createEffect, onCleanup } from "solid-js";
 import { useHotKeysManagerContext } from "src/hooks";
 import {
@@ -9,7 +9,7 @@ import type { MaybeAccessor } from "src/types";
 import { getValueFromAccessor } from "src/utilities";
 
 export type UseHotKeysScopeOptions = {
-	hotKeys: MaybeAccessor<Record<string, HotKeyHandler>>;
+	hotKeys: MaybeAccessor<Record<string, IHotKeyInput>>;
 	/**
 	 * The separator of the hotkeys
 	 * @default ","

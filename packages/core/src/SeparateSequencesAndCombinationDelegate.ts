@@ -1,11 +1,18 @@
+import { Logger } from "src/Logger";
 import {
 	IHotKeyDelegate,
 	IHotKeyDelegateOptions,
 	IHotKeyScopeInstance,
 } from "src/types";
-import { debounce, getKeyFromEvent, normalizeKey } from "src/ultilities";
+import {
+	debounce,
+	getKeyFromEvent,
+	isEditableElement,
+	normalizeKey,
+} from "src/ultilities";
 
 export class SeparateSequencesAndCombinationDelegate
+	extends Logger
 	implements IHotKeyDelegate
 {
 	private pressedKeys: string[] = [];
@@ -13,8 +20,10 @@ export class SeparateSequencesAndCombinationDelegate
 
 	constructor(
 		private readonly globalScope: IHotKeyScopeInstance,
-		private options: IHotKeyDelegateOptions
-	) {}
+		protected options: IHotKeyDelegateOptions
+	) {
+		super(options);
+	}
 
 	updateOptions(options: Partial<IHotKeyDelegateOptions>): void {
 		this.options = {
@@ -60,8 +69,22 @@ export class SeparateSequencesAndCombinationDelegate
 		const node = chainNode || combinedNode;
 
 		if (node) {
+			if (
+				node.enabled === false ||
+				(node.ignoreInput !== false && isEditableElement(e.target))
+			) {
+				return this.resetKeyboardEventState();
+			}
+
 			activeScope?.setCurrentNode(node);
 			if (node.handler) {
+				this.debugLog("Key Down - Found Hot Key", "green", () => {
+					console.log("Hot key", hotKey);
+					console.log("Active Scope", activeScope?.name);
+					console.log("Node", node);
+					this.logKeyboardEventInfo(e);
+				});
+
 				if (this.options.stopPropagation) {
 					e.stopPropagation();
 				}
@@ -69,7 +92,7 @@ export class SeparateSequencesAndCombinationDelegate
 					e.preventDefault();
 				}
 
-				node.handler(hotKey, e);
+				node.handler(node.hotKey || hotKey, e);
 
 				if (node.nodes.size === 0) {
 					this.resetKeyboardEventState();
@@ -87,8 +110,22 @@ export class SeparateSequencesAndCombinationDelegate
 			const globalScopeNode = globalScopeChainNode || globalScopeCombinedNode;
 
 			if (globalScopeNode) {
+				if (
+					globalScopeNode.enabled === false ||
+					(globalScopeNode.ignoreInput !== false && isEditableElement(e.target))
+				) {
+					return this.resetKeyboardEventState();
+				}
+
 				this.globalScope.setCurrentNode(globalScopeNode);
 				if (globalScopeNode.handler) {
+					this.debugLog("Key Down - Found Global Hot Key", "green", () => {
+						console.log("Hot key", hotKey);
+						console.log("Active Scope", this.globalScope.name);
+						console.log("Node", globalScopeNode);
+						this.logKeyboardEventInfo(e);
+					});
+
 					if (this.options.stopPropagation) {
 						e.stopPropagation();
 					}
@@ -96,15 +133,21 @@ export class SeparateSequencesAndCombinationDelegate
 						e.preventDefault();
 					}
 
-					globalScopeNode.handler(hotKey, e);
+					globalScopeNode.handler(globalScopeNode.hotKey || hotKey, e);
 					if (globalScopeNode.nodes.size === 0) {
 						this.resetKeyboardEventState();
 					}
-					return;
 				}
+
 				return;
 			}
 		}
+
+		this.debugLog("Key Down - Found No Hot Key", "red", () => {
+			console.log("Hot key", hotKey);
+			console.log("Active Scope", activeScope?.name);
+			this.logKeyboardEventInfo(e);
+		});
 	};
 
 	handleKeyUp = (e: KeyboardEvent): void => {
@@ -112,4 +155,15 @@ export class SeparateSequencesAndCombinationDelegate
 			(x) => x !== normalizeKey(e.key)
 		);
 	};
+
+	logKeyboardEventInfo(e: KeyboardEvent) {
+		console.log("Key", e.key);
+		console.log("Key code", e.keyCode || e.which || e.charCode);
+		this.debugLog("Modifier keys", "blue", () => {
+			console.log("Meta key", e.metaKey);
+			console.log("Alt key", e.altKey);
+			console.log("Shift key", e.shiftKey);
+			console.log("Control key", e.ctrlKey);
+		});
+	}
 }

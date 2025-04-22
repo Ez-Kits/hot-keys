@@ -1,6 +1,6 @@
 import {
 	registerHotKeysFromRecord,
-	type HotKeyHandler,
+	type IHotKeyInput,
 } from "@ez-kits/hot-keys-core";
 import { useEffect } from "react";
 import { useHotKeysManagerContext } from "src/hooks";
@@ -10,7 +10,7 @@ import {
 } from "src/hooks/useActivateHotKeyScope";
 
 export type UseHotKeysScopeOptions = {
-	hotKeys: Record<string, HotKeyHandler>;
+	hotKeys: Record<string, IHotKeyInput>;
 	/**
 	 * The separator of the hotkeys
 	 * @default ","
