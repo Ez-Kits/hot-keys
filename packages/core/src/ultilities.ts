@@ -44,6 +44,7 @@ export function normalizeKey(key: string): string {
 		case "return":
 			return "enter";
 		case "space":
+		case "": // trimmed space
 			return " ";
 		default:
 			return lowerCaseKey;
