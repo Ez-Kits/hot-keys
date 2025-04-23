@@ -173,7 +173,6 @@ export class SeparateSequencesAndCombinationDelegate
 			console.log("Root Node", cloneHotKeyNode(activeScope?.getRootNode()!));
 			this.logKeyboardEventInfo(e);
 		});
-		this.resetKeyboardEventState();
 	};
 
 	handleKeyUp = (e: KeyboardEvent): void => {
