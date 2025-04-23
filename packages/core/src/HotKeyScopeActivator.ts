@@ -91,13 +91,17 @@ export class HotKeyScopeActivator {
 		element.addEventListener(
 			"mouseenter",
 			(event) => {
-				if (event.target === element) {
+				if (
+					event.target === element ||
+					(event.target instanceof Node && element.contains(event.target))
+				) {
 					this.hotKeysManager.activateScope(this.options.scopeName);
 				}
 			},
 			{
 				signal: eventAbortController.signal,
 				capture: true,
+				passive: true,
 			}
 		);
 		element.addEventListener(
@@ -110,6 +114,7 @@ export class HotKeyScopeActivator {
 			{
 				signal: eventAbortController.signal,
 				capture: true,
+				passive: true,
 			}
 		);
 	}
@@ -125,13 +130,17 @@ export class HotKeyScopeActivator {
 		element.addEventListener(
 			"focus",
 			(event) => {
-				if (event.target === element) {
+				if (
+					event.target === element ||
+					(event.target instanceof Node && element.contains(event.target))
+				) {
 					this.hotKeysManager.activateScope(this.options.scopeName);
 				}
 			},
 			{
 				signal: eventAbortController.signal,
 				capture: true,
+				passive: true,
 			}
 		);
 
@@ -142,7 +151,11 @@ export class HotKeyScopeActivator {
 					this.hotKeysManager.deactivateScope();
 				}
 			},
-			{ signal: eventAbortController.signal, capture: true }
+			{
+				signal: eventAbortController.signal,
+				capture: true,
+				passive: true,
+			}
 		);
 	}
 

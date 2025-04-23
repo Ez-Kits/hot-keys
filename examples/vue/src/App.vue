@@ -28,6 +28,9 @@ useHotKeysScope({
 		"ctrl_b, cmd_b": () => {
 			console.log("Scope: ctrl then b");
 		},
+		space: () => {
+			console.log("Scope: space");
+		},
 	},
 	getActivatorElement: () => containerRef.value,
 });
