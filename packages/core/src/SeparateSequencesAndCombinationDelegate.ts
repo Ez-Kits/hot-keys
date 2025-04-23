@@ -5,6 +5,7 @@ import {
 	IHotKeyScopeInstance,
 } from "src/types";
 import {
+	cloneHotKeyNode,
 	debounce,
 	getKeyFromEvent,
 	isEditableElement,
@@ -80,7 +81,16 @@ export class SeparateSequencesAndCombinationDelegate
 			if (node.handler) {
 				this.debugLog("Key Down - Found Hot Key", "green", () => {
 					console.log("Hot key", hotKey);
-					console.log("Active Scope", activeScope?.name);
+					console.log(
+						"Active Scope",
+						activeScope === this.globalScope
+							? "EzHotKeys Global Scope"
+							: activeScope?.name
+					);
+					console.log(
+						"Root Node",
+						cloneHotKeyNode(activeScope?.getRootNode()!)
+					);
 					console.log("Node", node);
 					this.logKeyboardEventInfo(e);
 				});
@@ -121,7 +131,16 @@ export class SeparateSequencesAndCombinationDelegate
 				if (globalScopeNode.handler) {
 					this.debugLog("Key Down - Found Global Hot Key", "green", () => {
 						console.log("Hot key", hotKey);
-						console.log("Active Scope", this.globalScope.name);
+						console.log(
+							"Active Scope",
+							activeScope === this.globalScope
+								? "EzHotKeys Global Scope"
+								: activeScope?.name
+						);
+						console.log(
+							"Root Node",
+							cloneHotKeyNode(this.globalScope.getRootNode())
+						);
 						console.log("Node", globalScopeNode);
 						this.logKeyboardEventInfo(e);
 					});
@@ -145,9 +164,16 @@ export class SeparateSequencesAndCombinationDelegate
 
 		this.debugLog("Key Down - Found No Hot Key", "red", () => {
 			console.log("Hot key", hotKey);
-			console.log("Active Scope", activeScope?.name);
+			console.log(
+				"Active Scope",
+				activeScope === this.globalScope
+					? "EzHotKeys Global Scope"
+					: activeScope?.name
+			);
+			console.log("Root Node", cloneHotKeyNode(activeScope?.getRootNode()!));
 			this.logKeyboardEventInfo(e);
 		});
+		this.resetKeyboardEventState();
 	};
 
 	handleKeyUp = (e: KeyboardEvent): void => {
