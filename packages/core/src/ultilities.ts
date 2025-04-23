@@ -1,4 +1,4 @@
-import { IHotKeyInput, IHotKeysManagerInstance } from "src/types";
+import { IHotKeyInput, IHotKeyNode, IHotKeysManagerInstance } from "src/types";
 
 export function debounce(fn: () => void, milliseconds: number) {
 	let timeoutId: NodeJS.Timeout | undefined;
@@ -57,6 +57,22 @@ export function normalizeHotKey(hotKey: string): string[] {
 			.map((y) => normalizeKey(y))
 			.join("+")
 	);
+}
+
+export function cloneHotKeyNode<T extends IHotKeyNode | undefined>(node: T): T {
+	if (!node) {
+		return undefined as T;
+	}
+
+	return {
+		...node,
+		nodes: new Map(
+			Array.from(node.nodes.entries()).map(([key, value]) => [
+				key,
+				cloneHotKeyNode(value),
+			])
+		),
+	};
 }
 
 export function isEditableElement(eventTarget: EventTarget | null): boolean {
