@@ -1,5 +1,6 @@
 import { Logger } from "src/Logger";
 import {
+	HotKeyHandler,
 	IHotKeyDelegate,
 	IHotKeyDelegateOptions,
 	IHotKeyInfo,
@@ -10,6 +11,7 @@ import {
 	cloneHotKeyNode,
 	debounce,
 	getKeyFromEvent,
+	getModifierKeysFromEvent,
 	isEditableElement,
 	normalizeKey,
 } from "src/ultilities";
@@ -24,6 +26,12 @@ export class UnifiedSequencesAndCombinationDelegate
 {
 	private pressedKeys: string[] = [];
 	private activeScope: IHotKeyScopeInstance | undefined;
+	private repeatingHotKeyInfo:
+		| {
+				handler: HotKeyHandler;
+				hotKey: string;
+		  }
+		| undefined;
 
 	constructor(
 		private readonly globalScope: IHotKeyScopeInstance,
@@ -53,7 +61,17 @@ export class UnifiedSequencesAndCombinationDelegate
 	);
 
 	handleKeyDown = (e: KeyboardEvent): void => {
-		if (e.repeat || e.defaultPrevented) {
+		if (e.defaultPrevented) {
+			return;
+		}
+
+		if (e.repeat) {
+			if (this.repeatingHotKeyInfo) {
+				return this.repeatingHotKeyInfo.handler(
+					this.repeatingHotKeyInfo.hotKey,
+					e
+				);
+			}
 			return;
 		}
 
@@ -66,7 +84,12 @@ export class UnifiedSequencesAndCombinationDelegate
 			this.pressedKeys.push(normalizedKey);
 		}
 
-		const hotKey = this.pressedKeys.join("+");
+		const pressedKeysSet = new Set([
+			...getModifierKeysFromEvent(e),
+			...this.pressedKeys,
+		]);
+
+		const hotKey = Array.from(pressedKeysSet).sort().join("+");
 
 		const node = activeScope
 			? this.searchNodeByHotKey(activeScope, hotKey)
@@ -105,6 +128,14 @@ export class UnifiedSequencesAndCombinationDelegate
 				}
 
 				node.handler(node.hotKey || hotKey, e);
+				if (node.repeatable) {
+					this.repeatingHotKeyInfo = {
+						handler: node.handler,
+						hotKey: node.hotKey || hotKey,
+					};
+				} else {
+					this.repeatingHotKeyInfo = undefined;
+				}
 				this.resetKeyboardEventState();
 				return;
 			}
@@ -146,15 +177,29 @@ export class UnifiedSequencesAndCombinationDelegate
 					}
 
 					globalScopeNode.handler(globalScopeNode.hotKey || hotKey, e);
+					if (globalScopeNode.repeatable) {
+						this.repeatingHotKeyInfo = {
+							handler: globalScopeNode.handler,
+							hotKey: globalScopeNode.hotKey || hotKey,
+						};
+					} else {
+						this.repeatingHotKeyInfo = undefined;
+					}
 					this.resetKeyboardEventState();
 				}
 				return;
 			}
 		}
+		this.repeatingHotKeyInfo = undefined;
 
 		this.debugLog("Key Down - Found No Hot Key", "red", () => {
 			console.log("Hot key", hotKey);
-			console.log("Active Scope", activeScope?.name);
+			console.log(
+				"Active Scope",
+				activeScope === this.globalScope
+					? "EzHotKeys Global Scope"
+					: activeScope?.name
+			);
 			this.logKeyboardEventInfo(e);
 		});
 	};
@@ -178,14 +223,17 @@ export class UnifiedSequencesAndCombinationDelegate
 		return undefined;
 	}
 
-	private flattenNodes(node: IHotKeyNode, prefix = ""): IFlattenNode[] {
+	private flattenNodes(
+		node: IHotKeyNode,
+		prefix: string[] = []
+	): IFlattenNode[] {
 		const nodes: IFlattenNode[] = [];
 		for (const [key, childNode] of node.nodes.entries()) {
-			const computedKey = `${prefix}${key}`;
+			const computedKey = [...prefix, key].sort().join("+");
 			if (childNode.handler) {
 				nodes.push({ ...childNode, computedHotKey: computedKey });
 			}
-			nodes.push(...this.flattenNodes(childNode, `${computedKey}+`));
+			nodes.push(...this.flattenNodes(childNode, [...prefix, key]));
 		}
 		return nodes;
 	}

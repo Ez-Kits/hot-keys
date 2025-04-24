@@ -56,6 +56,7 @@ export class HotKeyScopeInstance implements IHotKeyScopeInstance {
 			node.enabled = hotKeyInput.enabled;
 			node.ignoreInput = hotKeyInput.ignoreInput;
 			node.handler = hotKeyInput.handler;
+			node.repeatable = hotKeyInput.repeatable;
 		}
 	}
 

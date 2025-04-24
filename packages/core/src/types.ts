@@ -23,6 +23,11 @@ export interface IHotKeyInfo {
 	 */
 	ignoreInput?: boolean;
 	/**
+	 * Repeatable hotkey.
+	 * @default false
+	 */
+	repeatable?: boolean;
+	/**
 	 * The handler to call when the hotkey is triggered.
 	 */
 	handler?: HotKeyHandler;

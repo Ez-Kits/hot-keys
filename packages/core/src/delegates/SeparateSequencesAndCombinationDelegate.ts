@@ -1,5 +1,6 @@
 import { Logger } from "src/Logger";
 import {
+	HotKeyHandler,
 	IHotKeyDelegate,
 	IHotKeyDelegateOptions,
 	IHotKeyScopeInstance,
@@ -8,6 +9,7 @@ import {
 	cloneHotKeyNode,
 	debounce,
 	getKeyFromEvent,
+	getModifierKeysFromEvent,
 	isEditableElement,
 	normalizeKey,
 } from "src/ultilities";
@@ -18,6 +20,12 @@ export class SeparateSequencesAndCombinationDelegate
 {
 	private pressedKeys: string[] = [];
 	private activeScope: IHotKeyScopeInstance | undefined;
+	private repeatingHotKeyInfo:
+		| {
+				handler: HotKeyHandler;
+				hotKey: string;
+		  }
+		| undefined;
 
 	constructor(
 		private readonly globalScope: IHotKeyScopeInstance,
@@ -49,7 +57,17 @@ export class SeparateSequencesAndCombinationDelegate
 	);
 
 	handleKeyDown = (e: KeyboardEvent): void => {
-		if (e.repeat || e.defaultPrevented) {
+		if (e.defaultPrevented) {
+			return;
+		}
+
+		if (e.repeat) {
+			if (this.repeatingHotKeyInfo) {
+				return this.repeatingHotKeyInfo.handler(
+					this.repeatingHotKeyInfo.hotKey,
+					e
+				);
+			}
 			return;
 		}
 
@@ -62,7 +80,12 @@ export class SeparateSequencesAndCombinationDelegate
 			this.pressedKeys.push(normalizedKey);
 		}
 
-		const hotKey = this.pressedKeys.join("+");
+		const pressedKeysSet = new Set([
+			...getModifierKeysFromEvent(e),
+			...this.pressedKeys,
+		]);
+
+		const hotKey = Array.from(pressedKeysSet).sort().join("+");
 
 		const chainNode = activeScope?.searchNodeByHotKey(hotKey);
 		const combinedNode = activeScope?.searchNodeByHotKeyFromRoot(hotKey);
@@ -102,7 +125,15 @@ export class SeparateSequencesAndCombinationDelegate
 					e.preventDefault();
 				}
 
-				node.handler(node.hotKey || hotKey, e);
+				const retrievedHotKey = node.hotKey || hotKey;
+				node.handler(retrievedHotKey, e);
+
+				if (node.repeatable) {
+					this.repeatingHotKeyInfo = {
+						handler: node.handler,
+						hotKey: retrievedHotKey,
+					};
+				}
 
 				if (node.nodes.size === 0) {
 					this.resetKeyboardEventState();
@@ -152,7 +183,15 @@ export class SeparateSequencesAndCombinationDelegate
 						e.preventDefault();
 					}
 
-					globalScopeNode.handler(globalScopeNode.hotKey || hotKey, e);
+					const retrievedHotKey = globalScopeNode.hotKey || hotKey;
+					globalScopeNode.handler(retrievedHotKey, e);
+					if (globalScopeNode.repeatable) {
+						this.repeatingHotKeyInfo = {
+							handler: globalScopeNode.handler,
+							hotKey: retrievedHotKey,
+						};
+					}
+
 					if (globalScopeNode.nodes.size === 0) {
 						this.resetKeyboardEventState();
 					}
@@ -161,6 +200,7 @@ export class SeparateSequencesAndCombinationDelegate
 				return;
 			}
 		}
+		this.repeatingHotKeyInfo = undefined;
 
 		this.debugLog("Key Down - Found No Hot Key", "red", () => {
 			console.log("Hot key", hotKey);
@@ -179,6 +219,10 @@ export class SeparateSequencesAndCombinationDelegate
 		this.pressedKeys = this.pressedKeys.filter(
 			(x) => x !== normalizeKey(e.key)
 		);
+
+		if (this.pressedKeys.length === 0) {
+			this.repeatingHotKeyInfo = undefined;
+		}
 	};
 
 	logKeyboardEventInfo(e: KeyboardEvent) {
