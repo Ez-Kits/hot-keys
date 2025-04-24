@@ -128,7 +128,7 @@ export class HotKeyScopeActivator {
 		const eventAbortController = this.getEventAbortController();
 
 		element.addEventListener(
-			"focus",
+			"focusin",
 			(event) => {
 				if (
 					event.target === element ||
@@ -145,7 +145,7 @@ export class HotKeyScopeActivator {
 		);
 
 		element.addEventListener(
-			"blur",
+			"focusout",
 			(event) => {
 				if (event.target === element) {
 					this.hotKeysManager.deactivateScope();
