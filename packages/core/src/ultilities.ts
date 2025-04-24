@@ -1,4 +1,4 @@
-import { IHotKeyInput, IHotKeyNode, IHotKeysManagerInstance } from "src/types";
+import { IHotKeyNode } from "src/types";
 
 export function debounce(fn: () => void, milliseconds: number) {
 	let timeoutId: NodeJS.Timeout | undefined;
@@ -23,10 +23,14 @@ export function getKeyFromEvent(e: KeyboardEvent): string {
 		return String.fromCharCode(keyCode).toLowerCase();
 	}
 
-	return e.key.toLowerCase().trim();
+	return e.key.length === 1 ? e.key.toLowerCase() : e.key.toLowerCase().trim();
 }
 
 export function normalizeKey(key: string): string {
+	if (key.length === 1) {
+		return key.toLowerCase();
+	}
+
 	const lowerCaseKey = key.toLowerCase().trim();
 
 	switch (lowerCaseKey) {
@@ -44,7 +48,6 @@ export function normalizeKey(key: string): string {
 		case "return":
 			return "enter";
 		case "space":
-		case "": // trimmed space
 			return " ";
 		default:
 			return lowerCaseKey;
@@ -56,8 +59,31 @@ export function normalizeHotKey(hotKey: string): string[] {
 		x
 			.split("+")
 			.map((y) => normalizeKey(y))
+			.sort()
 			.join("+")
 	);
+}
+
+export function getModifierKeysFromEvent(e: KeyboardEvent): string[] {
+	const modifierKeys: string[] = [];
+
+	if (e.altKey) {
+		modifierKeys.push("alt");
+	}
+
+	if (e.ctrlKey) {
+		modifierKeys.push("control");
+	}
+
+	if (e.metaKey) {
+		modifierKeys.push("meta");
+	}
+
+	if (e.shiftKey) {
+		modifierKeys.push("shift");
+	}
+
+	return modifierKeys.sort();
 }
 
 export function cloneHotKeyNode<T extends IHotKeyNode | undefined>(node: T): T {
@@ -110,81 +136,4 @@ export function isEditableElement(eventTarget: EventTarget | null): boolean {
 	}
 
 	return eventTarget.isContentEditable;
-}
-
-export function registerHotKeys(
-	hotKeyManager: IHotKeysManagerInstance,
-	scope: string,
-	hotKeysString: string,
-	hotKeysSeparator: string,
-	input: IHotKeyInput
-) {
-	const scopeInstance = hotKeyManager.registerScope(scope);
-	const hotKeys = hotKeysString
-		.split(hotKeysSeparator || ",")
-		.map((hotKey) => hotKey.trim());
-
-	hotKeys.forEach((hotKey) => {
-		scopeInstance.addHotKey(hotKey, input);
-	});
-
-	return () => {
-		hotKeys.forEach((hotKey) => {
-			scopeInstance.removeHotKey(hotKey);
-		});
-		hotKeyManager.unregisterScopeIfNeed(scope);
-	};
-}
-
-export function registerHotKeysFromRecord(
-	hotKeysManager: IHotKeysManagerInstance,
-	scope: string,
-	hotKeys: Record<string, IHotKeyInput>,
-	hotKeysSeparator: string
-) {
-	const hotKeysPairs = Object.entries(hotKeys);
-	const unRegisterHotKeys = hotKeysPairs.map(([hotKey, input]) =>
-		registerHotKeys(hotKeysManager, scope, hotKey, hotKeysSeparator, input)
-	);
-
-	return () => {
-		unRegisterHotKeys.forEach((unRegisterHotKey) => unRegisterHotKey());
-	};
-}
-
-export function registerGlobalHotKeys(
-	hotKeyManager: IHotKeysManagerInstance,
-	hotKeysString: string,
-	hotKeysSeparator: string,
-	input: IHotKeyInput
-) {
-	const scopeInstance = hotKeyManager.globalScope;
-	const hotKeys = hotKeysString
-		.split(hotKeysSeparator || ",")
-		.map((hotKey) => hotKey.trim());
-
-	hotKeys.forEach((hotKey) => {
-		scopeInstance.addHotKey(hotKey, input);
-	});
-
-	return () => {
-		hotKeys.forEach((hotKey) => {
-			scopeInstance.removeHotKey(hotKey);
-		});
-	};
-}
-
-export function registerGlobalHotKeysFromRecord(
-	hotKeysManager: IHotKeysManagerInstance,
-	hotKeys: Record<string, IHotKeyInput>,
-	hotKeysSeparator: string
-) {
-	const hotKeysPairs = Object.entries(hotKeys);
-	const unRegisterHotKeys = hotKeysPairs.map(([hotKey, input]) =>
-		registerGlobalHotKeys(hotKeysManager, hotKey, hotKeysSeparator, input)
-	);
-
-	return () => {
-		unRegisterHotKeys.forEach((unRegisterHotKey) => unRegisterHotKey());
-	};
 }

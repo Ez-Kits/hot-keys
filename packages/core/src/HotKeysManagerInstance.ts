@@ -1,5 +1,8 @@
+import {
+	SeparateSequencesAndCombinationDelegate,
+	UnifiedSequencesAndCombinationDelegate,
+} from "src/delegates";
 import { HotKeyScopeInstance } from "src/HotKeyScopeInstance";
-import { SeparateSequencesAndCombinationDelegate } from "src/SeparateSequencesAndCombinationDelegate";
 import {
 	IHotKeyDelegate,
 	IHotKeyScopeInstance,
@@ -7,7 +10,6 @@ import {
 	IHotKeysManagerOptions,
 } from "src/types";
 import { isServer } from "src/ultilities";
-import { UnifiedSequencesAndCombinationDelegate } from "src/UnifiedSequencesAndCombinationDelegate";
 
 export class HotKeysManagerInstance implements IHotKeysManagerInstance {
 	private scopes: Map<string, IHotKeyScopeInstance>;
