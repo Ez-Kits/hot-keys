@@ -3,16 +3,43 @@ export interface IHotKeyScope {
 	root: IHotKeyNode;
 }
 
-export interface IHotKeyNode {
+export interface IHotKeyNode extends IHotKeyInfo {
 	nodes: Map<string, IHotKeyNode>;
+}
+
+export interface IHotKeyInfo {
+	/**
+	 * The hotkey to trigger.
+	 */
+	hotKey?: string;
+	/**
+	 * If true, the hotkey will be enabled.
+	 * @default true
+	 */
+	enabled?: boolean;
+	/**
+	 * If true, the hotkey will not be triggered if the input is focused.
+	 * @default true
+	 */
+	ignoreInput?: boolean;
+	/**
+	 * Repeatable hotkey.
+	 * @default false
+	 */
+	repeatable?: boolean;
+	/**
+	 * The handler to call when the hotkey is triggered.
+	 */
 	handler?: HotKeyHandler;
 }
 
 export type HotKeyHandler = (hotKey: string, event: KeyboardEvent) => void;
 
+export type IHotKeyInput = Omit<IHotKeyInfo, "hotKey"> | HotKeyHandler;
+
 export interface IHotKeyScopeInstance {
 	name: string;
-	addHotKey(hotKey: string, callback: HotKeyHandler): void;
+	addHotKey(hotKey: string, input: IHotKeyInput): void;
 	removeHotKey(hotKey: string): void;
 	searchNodeByHotKey(hotKey: string): IHotKeyNode | undefined;
 	searchNodeByHotKeyFromRoot(hotKey: string): IHotKeyNode | undefined;
@@ -36,6 +63,9 @@ export interface IHotKeysManagerInstance {
 	deactivateScope(scopeName: string): void;
 	getActiveScope(): IHotKeyScopeInstance;
 
+	disable(): void;
+	enable(): void;
+
 	mount(): () => void;
 	unmount(): void;
 }
@@ -52,6 +82,12 @@ export interface IHotKeysManagerOptions extends IHotKeyDelegateOptions {
 	 * @default `separate`
 	 */
 	mode?: "separate" | "unified";
+
+	/**
+	 * If true, the hotkeys manager will be enabled. And all hotkeys will be triggered.
+	 * @default true
+	 */
+	enabled?: boolean;
 }
 
 export interface IHotKeyScopeActivatorOptions {
@@ -95,4 +131,9 @@ export interface IHotKeyDelegateOptions {
 	 * @default false
 	 */
 	preventDefault?: boolean;
+	/**
+	 * If true, the hotkeys manager will log debug information to the console.
+	 * @default false
+	 */
+	debug?: boolean;
 }

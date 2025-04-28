@@ -1,6 +1,6 @@
 import {
 	registerGlobalHotKeysFromRecord,
-	type HotKeyHandler,
+	type IHotKeyInput,
 } from "@ez-kits/hot-keys-core";
 import { createEffect, onCleanup } from "solid-js";
 import { useHotKeysManagerContext } from "src/hooks";
@@ -8,7 +8,7 @@ import type { MaybeAccessor } from "src/types";
 import { getValueFromAccessor } from "src/utilities";
 
 export interface UseGlobalHotKeysOptions {
-	hotKeys: MaybeAccessor<Record<string, HotKeyHandler>>;
+	hotKeys: MaybeAccessor<Record<string, IHotKeyInput>>;
 	/**
 	 * The separator of the hotkeys
 	 * @default ","

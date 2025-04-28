@@ -33,7 +33,7 @@ const App = () => {
 				<strong>Unified:</strong> Press <code>ctrl then b</code> is same as{" "}
 				<code>cmd+b</code>.
 			</div>
-			<HotKeysManager mode={mode}>
+			<HotKeysManager mode={mode} debug={true}>
 				<HotKeysScope />
 			</HotKeysManager>
 		</div>
@@ -55,6 +55,9 @@ function HotKeysScope() {
 			},
 			"ctrl_b, cmd_b": () => {
 				console.log("Scope: ctrl then b");
+			},
+			space: () => {
+				console.log("Scope: space");
 			},
 		},
 		getActivatorElement: () => elementRef.current,

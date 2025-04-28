@@ -1,12 +1,12 @@
 import {
 	registerHotKeysFromRecord,
-	type HotKeyHandler,
+	type IHotKeyInput,
 } from "@ez-kits/hot-keys-core";
 import { useInjectHotKeysManager } from "src/provides";
 import { toValue, watchEffect, type MaybeRef } from "vue";
 
 export interface UseHotKeysOptions {
-	hotKeys: MaybeRef<Record<string, HotKeyHandler>>;
+	hotKeys: MaybeRef<Record<string, IHotKeyInput>>;
 	/**
 	 * The separator of the hotkeys
 	 * @default ","

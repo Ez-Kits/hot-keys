@@ -1,6 +1,6 @@
 import { normalizeHotKey } from "src/ultilities";
 import {
-	HotKeyHandler,
+	IHotKeyInput,
 	IHotKeyNode,
 	IHotKeyScope,
 	IHotKeyScopeInstance,
@@ -36,21 +36,28 @@ export class HotKeyScopeInstance implements IHotKeyScopeInstance {
 		this.scope.currentNode = this.scope.root;
 	}
 
-	addHotKey(hotKey: string, callback: HotKeyHandler): void {
+	addHotKey(hotKey: string, hotKeyInput: IHotKeyInput): void {
 		const normalizedHotKey = normalizeHotKey(hotKey);
 		let node = this.scope.root;
 
 		for (const key of normalizedHotKey) {
 			if (!node.nodes.has(key)) {
 				node.nodes.set(key, { nodes: new Map() });
-			} else {
-				console.warn(`HotKey ${hotKey} already exists`);
 			}
 
 			node = node.nodes.get(key)!;
 		}
 
-		node.handler = callback;
+		if (typeof hotKeyInput === "function") {
+			node.handler = hotKeyInput;
+			node.hotKey = hotKey;
+		} else {
+			node.hotKey = hotKey;
+			node.enabled = hotKeyInput.enabled;
+			node.ignoreInput = hotKeyInput.ignoreInput;
+			node.handler = hotKeyInput.handler;
+			node.repeatable = hotKeyInput.repeatable;
+		}
 	}
 
 	removeHotKey(hotKey: string): void {

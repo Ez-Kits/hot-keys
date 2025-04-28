@@ -1,6 +1,6 @@
 import {
 	registerHotKeysFromRecord,
-	type HotKeyHandler,
+	type IHotKeyInput,
 } from "@ez-kits/hot-keys-core";
 import {
 	useActivateHotKeyScope,
@@ -10,7 +10,7 @@ import { useInjectHotKeysManager } from "src/provides";
 import { toValue, watchEffect, type MaybeRef } from "vue";
 
 export type UseHotKeysScopeOptions = {
-	hotKeys: MaybeRef<Record<string, HotKeyHandler>>;
+	hotKeys: MaybeRef<Record<string, IHotKeyInput>>;
 	/**
 	 * The separator of the hotkeys
 	 * @default ","
