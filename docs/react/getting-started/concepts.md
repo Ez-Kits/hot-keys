@@ -61,20 +61,3 @@ useHotKeysScope({
 - `unified`: Sequences hot keys and combinations will be handled in the same way. Example: `ctrl_s` is the same as `ctrl+s`.
 
 **Default Mode:** The default mode is `separate`.
-
-You can change the mode in two ways:
-
-- By using `mode` prop of `HotKeysManager` component.
-
-```tsx
-<HotKeysManager mode="unified">
-	<App />
-</HotKeysManager>
-```
-
-- By using `updateOptions` function of `useHotKeysManagerContext` hook.
-
-```tsx
-const HotKeysManager = useHotKeysManagerContext();
-HotKeysManager.updateOptions({ mode: "unified" });
-```

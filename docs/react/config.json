@@ -19,10 +19,6 @@
 						{
 							"text": "Concepts",
 							"slug": "/getting-started/concepts"
-						},
-						{
-							"text": "Usage",
-							"slug": "/getting-started/usage"
 						}
 					]
 				},
@@ -45,6 +41,20 @@
 						{
 							"text": "Register Sequence Hot Keys",
 							"slug": "/usage/register-sequence-hot-keys"
+						},
+						{
+							"text": "Advanced Usage",
+							"slug": "/usage/advanced-usage"
+						}
+					]
+				},
+				{
+					"text": "Example",
+					"icon": "material-symbols-play-shapes-outline-rounded",
+					"children": [
+						{
+							"text": "Basic Usage",
+							"slug": "/example"
 						}
 					]
 				}

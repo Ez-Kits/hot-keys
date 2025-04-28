@@ -1,13 +1,15 @@
 ---
 title: useGlobalHotKeys
-description: useGlobalHotKeys hook allows you to register global keyboard shortcuts (hot keys) in your React application. These shortcuts will work regardless of which element has focus in your application.
+description: useGlobalHotKeys hook allows you to register global hot keys in your React application. These hot keys will work regardless of which element has focus in your application.
 ---
+
+# `useGlobalHotKeys`
+
+`useGlobalHotKeys` hook allows you to register global hot keys in your React application. These hot keys will work regardless of which element has focus in your application.
 
 ## Usage
 
-### Basic Usage
-
-```tsx filename="MyComponent.tsx"
+```tsx{filename="MyComponent.tsx"}
 import { useGlobalHotKeys } from "@ez-kits/hot-keys-react";
 
 function MyComponent() {
@@ -31,35 +33,45 @@ function MyComponent() {
 }
 ```
 
-### Custom Separator
-
-```tsx filename="MyComponent.tsx"
-function MyComponent() {
-	useGlobalHotKeys({
-		hotKeys: {
-			"ctrl+s|cmd+s": (e) => {
-				e.preventDefault();
-				console.log("Save triggered");
-			},
-		},
-		hotKeysSeparator: "|", // Change separator from default "," to "|"
-	});
-
-	return <div>Press Ctrl+S or Cmd+S to save</div>;
-}
-```
-
-## Props & Types
+## Types
 
 ```typescript
-interface UseGlobalHotKeysOptions {
-	// Record of hotkey combinations and their handler functions
-	hotKeys: Record<string, HotKeyHandler>;
+interface IHotKeyInfo {
+	/**
+	 * If true, the hotkey will be enabled.
+	 * @default true
+	 */
+	enabled?: boolean;
+	/**
+	 * If true, the hotkey will not be triggered if the input is focused.
+	 * @default true
+	 */
+	ignoreInput?: boolean;
+	/**
+	 * Repeatable hotkey.
+	 * @default false
+	 */
+	repeatable?: boolean;
+	/**
+	 * The handler to call when the hotkey is triggered.
+	 */
+	handler?: HotKeyHandler;
+}
 
-	// Optional separator for defining multiple key combinations
-	// Default value is ","
+type HotKeyHandler = (hotKey: string, event: KeyboardEvent) => void;
+
+type IHotKeyInput = IHotKeyInfo | HotKeyHandler;
+
+interface UseGlobalHotKeysOptions {
+	hotKeys: Record<string, IHotKeyInput>;
+	/**
+	 * The separator of the hotkeys
+	 * @default ","
+	 */
 	hotKeysSeparator?: string;
 }
 
-type HotKeyHandler = (event: KeyboardEvent) => void;
+export declare function useGlobalHotKeys(
+	options: UseGlobalHotKeysOptions
+): void;
 ```

@@ -5,14 +5,7 @@ description: Register sequence hot keys in your application.
 
 # Register sequence hot keys
 
-Sequence hot keys are hot keys that are a sequence of hot keys. You can register sequence hot keys with both global and scoped hot keys.
-
-:::alert
----
-color: info
----
-Keys of the sequence hot key is separated by `_` in the string.
-:::
+Sequences are hot keys that are triggered by pressing keys sequentially. For example, `ctrl` then `s` is a sequence. You can register sequence hot keys with both global and scoped hot keys.
 
 ## Prerequisites
 
@@ -20,7 +13,11 @@ Before starting, you make sure you have read [Installation](/getting-started/ins
 
 ## Register sequence hot keys with global hot keys
 
-It is very str
+It is very straightforward to register sequence hot keys with global hot keys.
+
+:::alert{color="info"}
+Keys of the sequence hot key is separated by `_` in the string.
+:::
 
 ```tsx
 import { useGlobalHotKeys } from "@ez-kits/hot-keys-react";
@@ -37,6 +34,8 @@ function MyComponent() {
 ```
 
 ## Register sequence hot keys with scoped hot keys
+
+Just same as registering global hot keys, you can register sequence hot keys with scoped hot keys.
 
 ```tsx
 import { useHotKeys } from "@ez-kits/hot-keys-react";

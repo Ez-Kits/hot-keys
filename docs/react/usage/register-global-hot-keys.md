@@ -13,7 +13,7 @@ Before starting, you make sure you have read [Installation](/getting-started/ins
 
 ## `useGlobalHotKeys`
 
-Register global hot keys with **Ez Hot Keys** is very simple. You can use `useGlobalHotKeys` hook to register global hot keys.
+Register global hot keys with **Ez Hot Keys** is very simple. Just use `useGlobalHotKeys` hook to register global hot keys.
 
 ```tsx
 import { useGlobalHotKeys } from "@ez-kits/hot-keys-react";

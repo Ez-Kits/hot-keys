@@ -1,11 +1,15 @@
 ---
 title: useActivateHotKeysScope
-description: useActivateHotKeysScope is a hook that allows you to activate and manage a specific hot key scope within your React components. This hook helps you control when certain keyboard shortcuts are active based on component lifecycle and conditions.
+description: useActivateHotKeysScope is a hook that allows you to activate a specific hot key scope based on element's events.
 ---
+
+# `useActivateHotKeysScope`
+
+`useActivateHotKeysScope` is a hook that allows you to activate a specific hot key scope based on element's events.
 
 ## Usage
 
-```tsx filename="MyComponent.tsx"
+```tsx{filename="MyComponent.tsx"}
 import { useActivateHotKeysScope } from "@ez-kits/hot-keys-react";
 
 function MyComponent() {
@@ -25,7 +29,7 @@ function MyComponent() {
 ## Types
 
 ```ts
-interface UseActivateHotKeyScopeOptions {
+interface IHotKeyScopeActivatorOptions {
 	/**
 	 * The name of the scope.
 	 */
@@ -45,4 +49,10 @@ interface UseActivateHotKeyScopeOptions {
 	 */
 	getActivatorElement: () => HTMLElement | null | undefined;
 }
+
+interface UseActivateHotKeyScopeOptions extends IHotKeyScopeActivatorOptions {}
+
+export declare function useActivateHotKeyScope(
+	options: UseActivateHotKeyScopeOptions
+): void;
 ```

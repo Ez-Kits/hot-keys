@@ -3,6 +3,10 @@ title: HotKeysManager
 description: HotKeysManager is a React component that manages keyboard shortcuts (hot keys) and it's scopes in your application. It provides a context for managing different scopes of shortcuts.
 ---
 
+# HotKeysManager
+
+`HotKeysManager` is a React component that manages hot keys and it's scopes in your application. It provides a context for managing different scopes of hot keys.
+
 ## Usage
 
 ```tsx
@@ -24,7 +28,7 @@ root.render(
 ## Props & Types
 
 ```ts
-interface IHotKeysManagerOptions {
+interface IHotKeyDelegateOptions {
 	/**
 	 * If true, the keyboard event will not be propagated to the element when a hotkey is triggered.
 	 * @default false
@@ -35,20 +39,38 @@ interface IHotKeysManagerOptions {
 	 * @default false
 	 */
 	preventDefault?: boolean;
+	/**
+	 * If true, the hotkeys manager will log debug information to the console.
+	 * @default false
+	 */
+	debug?: boolean;
+}
 
+interface IHotKeysManagerOptions extends IHotKeyDelegateOptions {
 	/**
 	 * Root element to listen to keyboard events.
 	 * @default `document`
 	 */
 	getElement?: () => HTMLElement | null | undefined;
+
 	/**
 	 * The mode of the hotkeys manager.
 	 * @default `separate`
 	 */
 	mode?: "separate" | "unified";
+
+	/**
+	 * If true, the hotkeys manager will be enabled. And all hotkeys will be triggered.
+	 * @default true
+	 */
+	enabled?: boolean;
 }
 
 interface HotKeysManagerProps extends IHotKeysManagerOptions {
 	children: React.ReactNode;
 }
+
+export declare function HotKeysManager(
+	props: HotKeysManagerProps
+): React.ReactNode;
 ```

@@ -5,6 +5,8 @@ description: Activate hot key scope in your application.
 
 # Activate Hot Key Scope
 
+In this page, we will learn how to activate hot key scope in your application.
+
 ## Prerequisites
 
 Before starting, you make sure you have read [Installation](/getting-started/installation) and [Concepts](/getting-started/concepts) pages.
