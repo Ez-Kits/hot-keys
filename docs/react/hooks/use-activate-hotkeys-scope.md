@@ -26,6 +26,10 @@ function MyComponent() {
 }
 ```
 
+:::alert{color="info" icon="majesticons-lightbulb-shine-line"}
+Checkout [Activate Hot Keys Scope](/react/usage/activate-hot-key-scope) page for more details.
+:::
+
 ## Types
 
 ```ts

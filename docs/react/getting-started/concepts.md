@@ -13,15 +13,17 @@ The `HotKeysManager` is a React component that manages hot keys (keyboard shortc
 
 ## Hot Keys Scope
 
-**Ez Hot Keys** manages hot keys in scopes. Each hot key is associated with a scope. You can register a hot keys scope with hooks: `useHotKeysScope`.
+**Ez Hot Keys** manages hot keys in scopes. Each hot key is associated with a scope. Imagine your application has several features, you can register a hot keys scope for each feature, in this way, you can manage hot keys in each feature separately without worrying about duplicate hot keys in different features.
+
+You can register a hot keys scope with hooks: `useHotKeysScope`.
 
 ## Active Scope
 
-The active scope is the scope that is currently active. There is only one active scope at a time. **Ez Hot Keys** will only trigger the hot keys of the active scope.
+The active scope is the scope that is currently active. **Ez Hot Keys** will only trigger the hot keys of the active scope. There is only one active scope at a time.
 
 ## Global Hot Keys
 
-The global hot keys are hot keys that are not associated with any scope. They will be triggered if no scope handle the hot key. You can register global hot keys with `useGlobalHotKeys` hook.
+The global hot keys are hot keys that are not associated with any scope. They will be triggered if the active scope does not handle the hot key. You can register global hot keys with `useGlobalHotKeys` hook.
 
 ## Sequences
 
@@ -57,7 +59,22 @@ useHotKeysScope({
 
 **Ez Hot Keys** has two modes to handle hot keys:
 
-- `separate`: Sequences hot keys and combinations will be handled separately. Example: `ctrl_s` is different from `ctrl+s`.
-- `unified`: Sequences hot keys and combinations will be handled in the same way. Example: `ctrl_s` is the same as `ctrl+s`.
+### Separate Mode
+
+Sequences hot keys and combinations will be handled separately.
+
+**Example:**
+
+- `ctrl_s` will only be triggered when user press `ctrl` then `s`.
+- `ctrl+s` will only be triggered when user press `ctrl+s`.
+
+### Unified Mode
+
+Sequences hot keys and combinations will be triggered in both ways.
+
+**Example:**
+
+- `ctrl_s` will be triggered when user press `ctrl+s` or `ctrl` then `s`.
+- `ctrl+s` will also be triggered when user press `ctrl+s` or `ctrl` then `s`.
 
 **Default Mode:** The default mode is `separate`.

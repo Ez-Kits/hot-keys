@@ -38,9 +38,9 @@ This is useful when you want your user to be able to trigger a hot key even when
 
 ### Repeatable
 
-What is a repeat? It means user press the key and hold it.
+What is a repeat? It means user press the key and hold it. For example, if the hot key is `ctrl+k`, and the user press `ctrl+k` and hold on `k` key, the hot key handler will be triggered repeatedly.
 
-By default, hot keys will only trigger once when the user holds down the key. But in some cases, you may want to work with the repeated key. You can set the `repeatable` option to `true` to make the hot key work even when the user is holding down the key.
+By default, hot keys will only trigger once even when the user holds down the key. But in some cases, you may want to work with the repeated key. You can set the `repeatable` option to `true` to make the hot key work even when the user is holding down the key.
 
 ```tsx
 import { useGlobalHotKeys } from "@ez-kits/hot-keys-react";
@@ -120,8 +120,23 @@ function MyComponent() {
 
 **Ez Hot Keys** has two modes to handle hot keys:
 
-- `separate`: Sequences hot keys and combinations will be handled separately. Example: `ctrl_s` is different from `ctrl+s`.
-- `unified`: Sequences hot keys and combinations will be handled in the same way. Example: `ctrl_s` is the same as `ctrl+s`.
+**_Separate Mode_**
+
+Sequences hot keys and combinations will be handled separately.
+
+**Example:**
+
+- `ctrl_s` will only be triggered when user press `ctrl` then `s`.
+- `ctrl+s` will only be triggered when user press `ctrl+s`.
+
+**_Unified Mode_**
+
+Sequences hot keys and combinations will be triggered in both ways.
+
+**Example:**
+
+- `ctrl_s` will be triggered when user press `ctrl+s` or `ctrl` then `s`.
+- `ctrl+s` will also be triggered when user press `ctrl+s` or `ctrl` then `s`.
 
 **Default Mode:** The default mode is `separate`.
 

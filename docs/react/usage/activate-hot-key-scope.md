@@ -7,9 +7,9 @@ description: Activate hot key scope in your application.
 
 In this page, we will learn how to activate hot key scope in your application.
 
-## Prerequisites
+## Why need to activate hot key scope?
 
-Before starting, you make sure you have read [Installation](/getting-started/installation) and [Concepts](/getting-started/concepts) pages.
+In **Ez Hot Keys**, hot keys are managed in scopes. Each scope has its own hot keys. **Ez Hot Keys** will only trigger the hot keys of the active scope.
 
 ## `useActiveHotKeyScope`
 

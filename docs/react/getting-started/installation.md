@@ -43,3 +43,5 @@ root.render(
 	</StrictMode>
 );
 ```
+
+That is all you need to do to setup **Ez Hot Keys** in your application.

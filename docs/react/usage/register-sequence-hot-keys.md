@@ -7,10 +7,6 @@ description: Register sequence hot keys in your application.
 
 Sequences are hot keys that are triggered by pressing keys sequentially. For example, `ctrl` then `s` is a sequence. You can register sequence hot keys with both global and scoped hot keys.
 
-## Prerequisites
-
-Before starting, you make sure you have read [Installation](/getting-started/installation) and [Concepts](/getting-started/concepts) pages.
-
 ## Register sequence hot keys with global hot keys
 
 It is very straightforward to register sequence hot keys with global hot keys.

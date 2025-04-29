@@ -5,11 +5,7 @@ description: Register global hot keys in your application.
 
 # Register Global Hot Keys
 
-Global hot keys are hot keys that are not associated with any scope. They will be triggered if no scope handle the hot key. In this page, we will guide you through the process of registering global hot keys.
-
-## Prerequisites
-
-Before starting, you make sure you have read [Installation](/getting-started/installation) and [Concepts](/getting-started/concepts) pages.
+Global hot keys are hot keys that are not associated with any scope. They will be triggered if the active scope does not handle the hot key. In this page, we will guide you how to register global hot keys.
 
 ## `useGlobalHotKeys`
 
