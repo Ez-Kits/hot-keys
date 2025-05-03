@@ -34,8 +34,6 @@ function MyComponent() {
 
 This is useful when you want your user to be able to trigger a hot key even when they are typing. It may help your app have a better user experience.
 
-**Detect when handler is called repeatedly**
-
 ### Repeatable
 
 What is a repeat? It means user press the key and hold it. For example, if the hot key is `ctrl+k`, and the user press `ctrl+k` and hold on `k` key, the hot key handler will be triggered repeatedly.

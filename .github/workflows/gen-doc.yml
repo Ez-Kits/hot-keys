@@ -1,0 +1,29 @@
+name: Generate Doc
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - "docs/**"
+
+jobs:
+  gen-doc:
+    runs-on: ubuntu-latest
+    if: ${{ github.repository == 'Ez-Kits/hot-keys' && github.repository_owner == 'Ez-Kits' }}
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 22
+          cache: yarn
+          registry-url: "https://registry.npmjs.org"
+
+      - name: Install dependencies
+        run: yarn install --frozen-lockfile
+
+      - name: Generate Doc
+        shell: bash
+        run: yarn gen-doc-search-data ${{ github.ref_name }} ${{ secrets.R2_ACCESS_KEY_ID }} ${{ secrets.R2_SECRET_ACCESS_KEY }}

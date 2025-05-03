@@ -6,14 +6,20 @@
 		"nx": "nx",
 		"build": "nx run-many --projects=packages/** --target=build --parallel=6",
 		"dev": "nx run-many --projects=packages/** --target=dev --parallel=6",
-		"publish-packages": "node scripts/publish.js"
+		"publish-packages": "node scripts/publish.js",
+		"gen-doc-search-data": "node scripts/gen-doc-search-data.js"
 	},
 	"private": true,
 	"dependencies": {},
 	"devDependencies": {
+		"@aws-sdk/client-s3": "^3.802.0",
 		"@nx/js": "18.0.0",
+		"fast-glob": "^3.3.1",
+		"jsdom": "^26.1.0",
+		"markdown-it": "^14.1.0",
 		"nx": "18.0.0",
-		"fast-glob": "^3.3.1"
+		"slugify": "^1.6.6",
+		"yaml": "^2.7.1"
 	},
 	"workspaces": [
 		"packages/*",
