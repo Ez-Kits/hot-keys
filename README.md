@@ -3,7 +3,7 @@
 </p>
 
 <p align="center">
-Register and handle hot keys in ez-way.
+Ease of use yet powerful API for hot keys management
 </p>
 
 <p align="center">
@@ -21,18 +21,14 @@ Register and handle hot keys in ez-way.
 ## ✨ Features
 
 - **Agnostics:** Core of Ez Hot Keys is wrote with Vanilla Javascript. Supports `Vue`, `React` and `Solid`.
-- **Simple API**: Easy to integrate with minimal boilerplate code
-- **Lightweight**: Small bundle size with zero dependencies
+- **Simple API**: Easy to integrate with minimal boilerplate code.
+- **Lightweight**: Just ~3kb gzipped. Zero dependencies.
 - **Customizable**: Flexible configuration options for your specific needs.
-- **Sequences:** User can press keys sequentially. Like, press `Ctrl` then `A`.
-- **Combinations:** User can press keys combination. Like, press `Ctrl+A`.
-- **Global:** User can register global hot keys. Example: press `Ctrl+A` to do something.
-- **Scope:** User can register scope hot keys. Example: press `Ctrl+A` in a specific element to do something.
-- **Mode:** Supports two modes of hot keys: `separate` or `unified`.
+- **Sequences Hot Keys:** Supports sequence hot keys. Example, press `Ctrl` then `A`.
+- **Scoped Hot Keys:** Separate and manage hot keys in different scopes.
+- **Global Hot Keys:** Supports global hot keys.
 
 ## Documentation
 
-We're working on the documentation.
-
-At meantime, please checkout folder `examples`.
+[Full Documentation](https://ez-kits.org/hot-keys)
 <br>

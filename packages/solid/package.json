@@ -1,7 +1,7 @@
 {
 	"name": "@ez-kits/hot-keys-solid",
 	"version": "0.0.0",
-	"description": "Register and handle hot keys in ez-way",
+	"description": "Ease of use yet powerful API for hot keys management",
 	"repository": "https://github.com/Ez-Kits/hot-keys",
 	"author": "Niku",
 	"license": "MIT",
