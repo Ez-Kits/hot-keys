@@ -26,4 +26,4 @@ jobs:
 
       - name: Generate Doc
         shell: bash
-        run: yarn gen-doc-search-data ${{ github.ref_name }} ${{ secrets.R2_ACCESS_KEY_ID }} ${{ secrets.R2_SECRET_ACCESS_KEY }}
+        run: yarn gen-doc-search-data hot-keys-${{ secrets.R2_ACCESS_KEY_ID }} ${{ secrets.R2_SECRET_ACCESS_KEY }}
