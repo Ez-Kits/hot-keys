@@ -1,0 +1,96 @@
+{
+	"sidebar": [
+		{
+			"label": "Guide",
+			"icon": "material-symbols-book-4-rounded",
+			"children": [
+				{
+					"text": "Getting Started",
+					"icon": "material-symbols-light-motion-play-outline",
+					"children": [
+						{
+							"text": "Introduction",
+							"slug": "/getting-started/introduction"
+						},
+						{
+							"text": "Installation",
+							"slug": "/getting-started/installation"
+						},
+						{
+							"text": "Concepts",
+							"slug": "/getting-started/concepts"
+						}
+					]
+				},
+				{
+					"text": "Usage",
+					"icon": "ic-baseline-architecture",
+					"children": [
+						{
+							"text": "Register Scoped Hot Keys",
+							"slug": "/usage/register-scoped-hot-keys"
+						},
+						{
+							"text": "Register Global Hot Keys",
+							"slug": "/usage/register-global-hot-keys"
+						},
+						{
+							"text": "Activate Hot Key Scope",
+							"slug": "/usage/activate-hot-key-scope"
+						},
+						{
+							"text": "Register Sequence Hot Keys",
+							"slug": "/usage/register-sequence-hot-keys"
+						},
+						{
+							"text": "Advanced Usage",
+							"slug": "/usage/advanced-usage"
+						}
+					]
+				},
+				{
+					"text": "Example",
+					"icon": "material-symbols-play-shapes-outline-rounded",
+					"children": [
+						{
+							"text": "Basic Usage",
+							"slug": "/example"
+						}
+					]
+				}
+			]
+		},
+		{
+			"label": "API",
+			"icon": "mdi-api",
+			"children": [
+				{
+					"text": "Composables",
+					"icon": "mdi-hook",
+					"children": [
+						{
+							"text": "useHotKeys",
+							"slug": "/composables/use-hotkeys"
+						},
+						{
+							"text": "useHotKeysScope",
+							"slug": "/composables/use-hotkeys-scope"
+						},
+						{
+							"text": "useActivateHotKeysScope",
+							"slug": "/composables/use-activate-hotkeys-scope"
+						},
+						{
+							"text": "useGlobalHotKeys",
+							"slug": "/composables/use-global-hotkeys"
+						},
+						{
+							"text": "useInjectHotKeysManager",
+							"slug": "/composables/use-inject-hotkeys-manager"
+						}
+					]
+				}
+			]
+		}
+	]
+}
