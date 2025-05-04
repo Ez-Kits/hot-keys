@@ -16,16 +16,15 @@ In **Ez Hot Keys**, hot keys are managed in scopes. Each scope has its own hot k
 Hook `useActiveHotKeyScope` is used to activate hot keys scope by element events `focus` and `hover`.
 
 ```tsx
-import { useActiveHotKeyScope } from "@ez-kits/hot-keys-react";
-import { useRef } from "react";
+import { useActiveHotKeyScope } from "@ez-kits/hot-keys-solid";
 
 function MyComponent() {
-	const activatorElement = useRef<HTMLDivElement>(null);
+	let activatorElement: HTMLDivElement;
 	useActiveHotKeyScope({
 		scopeName: "test",
 		triggers: ["focus", "hover"],
 		autoFocus: true,
-		getActivatorElement: () => activatorElement.current,
+		getActivatorElement: () => activatorElement,
 	});
 
 	return (
@@ -45,11 +44,10 @@ When component is unmounted, the scope will be deactivated automatically.
 Hook `useHotKeysScope` is a wrapper of `useActiveHotKeyScope` and `useHotKeys`. So, you can use it to activate hot keys scope and register scoped hot keys at the same time.
 
 ```tsx
-import { useHotKeysScope } from "@ez-kits/hot-keys-react";
-import { useRef } from "react";
+import { useHotKeysScope } from "@ez-kits/hot-keys-solid";
 
 function MyComponent() {
-	const activatorElement = useRef<HTMLDivElement>(null);
+	let activatorElement: HTMLDivElement;
 
 	useHotKeysScope({
 		scopeName: "test",
@@ -60,7 +58,7 @@ function MyComponent() {
 		},
 		triggers: ["focus", "hover"],
 		autoFocus: true,
-		getActivatorElement: () => activatorElement.current,
+		getActivatorElement: () => activatorElement,
 	});
 
 	return (
@@ -78,7 +76,7 @@ function MyComponent() {
 You can use `HotKeysManager.activateScope` to activate a scope. To retrieve the `HotKeysManager` instance, you can use `useHotKeysManagerContext` hook.
 
 ```tsx
-import { useHotKeysManagerContext } from "@ez-kits/hot-keys-react";
+import { useHotKeysManagerContext } from "@ez-kits/hot-keys-solid";
 
 function MyComponent() {
 	const hotKeysManager = useHotKeysManagerContext();
@@ -93,7 +91,7 @@ function MyComponent() {
 You can also use `HotKeysManager.deactivateScope` to deactivate a scope.
 
 ```tsx
-import { useHotKeysManagerContext } from "@ez-kits/hot-keys-react";
+import { useHotKeysManagerContext } from "@ez-kits/hot-keys-solid";
 
 function MyComponent() {
 	const hotKeysManager = useHotKeysManagerContext();

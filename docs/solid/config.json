@@ -1,49 +1,104 @@
 {
 	"sidebar": [
 		{
-			"text": "Getting Started",
+			"label": "Guide",
+			"icon": "material-symbols-book-4-rounded",
 			"children": [
 				{
-					"text": "Introduction",
-					"slug": "/solid/getting-started/introduction"
-				},
-				{
-					"text": "Installation",
-					"slug": "/solid/getting-started/installation"
+					"text": "Getting Started",
+					"icon": "material-symbols-light-motion-play-outline",
+					"children": [
+						{
+							"text": "Introduction",
+							"slug": "/getting-started/introduction"
+						},
+						{
+							"text": "Installation",
+							"slug": "/getting-started/installation"
+						},
+						{
+							"text": "Concepts",
+							"slug": "/getting-started/concepts"
+						}
+					]
 				},
 				{
 					"text": "Usage",
-					"slug": "/solid/getting-started/usage"
+					"icon": "ic-baseline-architecture",
+					"children": [
+						{
+							"text": "Register Scoped Hot Keys",
+							"slug": "/usage/register-scoped-hot-keys"
+						},
+						{
+							"text": "Register Global Hot Keys",
+							"slug": "/usage/register-global-hot-keys"
+						},
+						{
+							"text": "Activate Hot Key Scope",
+							"slug": "/usage/activate-hot-key-scope"
+						},
+						{
+							"text": "Register Sequence Hot Keys",
+							"slug": "/usage/register-sequence-hot-keys"
+						},
+						{
+							"text": "Advanced Usage",
+							"slug": "/usage/advanced-usage"
+						}
+					]
+				},
+				{
+					"text": "Example",
+					"icon": "material-symbols-play-shapes-outline-rounded",
+					"children": [
+						{
+							"text": "Basic Usage",
+							"slug": "/example"
+						}
+					]
 				}
 			]
 		},
 		{
-			"text": "Components",
+			"label": "API",
+			"icon": "mdi-api",
 			"children": [
 				{
-					"text": "HotKeysManager",
-					"slug": "/solid/components/hotkeys-manager"
-				}
-			]
-		},
-		{
-			"text": "Hooks",
-			"children": [
-				{
-					"text": "useHotKeys",
-					"slug": "/solid/hooks/use-hotkeys"
+					"text": "Components",
+					"icon": "material-symbols-play-shapes-outline-rounded",
+					"children": [
+						{
+							"text": "HotKeysManager",
+							"slug": "/components/hotkeys-manager"
+						}
+					]
 				},
 				{
-					"text": "useHotKeysScope",
-					"slug": "/solid/hooks/use-hotkeys-scope"
-				},
-				{
-					"text": "useActivateHotKeysScope",
-					"slug": "/solid/hooks/use-activate-hotkeys-scope"
-				},
-				{
-					"text": "useGlobalHotKeys",
-					"slug": "/solid/hooks/use-global-hotkeys"
+					"text": "Hooks",
+					"icon": "mdi-hook",
+					"children": [
+						{
+							"text": "useHotKeys",
+							"slug": "/hooks/use-hotkeys"
+						},
+						{
+							"text": "useHotKeysScope",
+							"slug": "/hooks/use-hotkeys-scope"
+						},
+						{
+							"text": "useActivateHotKeysScope",
+							"slug": "/hooks/use-activate-hotkeys-scope"
+						},
+						{
+							"text": "useGlobalHotKeys",
+							"slug": "/hooks/use-global-hotkeys"
+						},
+						{
+							"text": "useHotKeysManagerContext",
+							"slug": "/hooks/use-hotkeys-manager-context"
+						}
+					]
 				}
 			]
 		}

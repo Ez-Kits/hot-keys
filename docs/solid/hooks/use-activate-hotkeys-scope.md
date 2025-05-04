@@ -10,29 +10,24 @@ description: useActivateHotKeysScope is a hook that allows you to activate a spe
 ## Usage
 
 ```tsx{filename="MyComponent.tsx"}
-import { useActivateHotKeysScope } from "@ez-kits/hot-keys-react";
-import { useRef } from "react";
+import { useActivateHotKeysScope } from "@ez-kits/hot-keys-solid";
 
 function MyComponent() {
-	const elementRef = useRef<HTMLDivElement>(null);
+	let elementRef: HTMLDivElement;
 
 	useActivateHotKeysScope({
 		scopeName: "my-component",
 		triggers: ["hover", "focus"],
 		autoFocus: true,
-		getActivatorElement: () => elementRef.current,
+		getActivatorElement: () => elementRef,
 	});
 
-	return (
-		<div ref={elementRef} tabIndex={0}>
-			My Component
-		</div>
-	);
+	return <div ref={elementRef} tabIndex={0}>My Component</div>;
 }
 ```
 
 :::alert{color="info" icon="majesticons-lightbulb-shine-line"}
-Checkout [Activate Hot Keys Scope](/react/usage/activate-hot-key-scope) page for more details.
+Checkout [Activate Hot Keys Scope](/solid/usage/activate-hot-key-scope) page for more details.
 :::
 
 ## Types
@@ -59,7 +54,8 @@ interface IHotKeyScopeActivatorOptions {
 	getActivatorElement: () => HTMLElement | null | undefined;
 }
 
-interface UseActivateHotKeyScopeOptions extends IHotKeyScopeActivatorOptions {}
+export interface UseActivateHotKeyScopeOptions
+	extends ToMaybeAccessorObject<IHotKeyScopeActivatorOptions> {}
 
 export declare function useActivateHotKeyScope(
 	options: UseActivateHotKeyScopeOptions

@@ -1,6 +1,6 @@
 ---
 title: Concepts
-description: Concepts of Ez Hot Keys for React.
+description: Concepts of Ez Hot Keys for Vue.
 ---
 
 # Concepts
@@ -9,13 +9,13 @@ Before you start using **Ez Hot Keys**, you should understand the following conc
 
 ## Hot Keys Manager
 
-The `HotKeysManager` is a React component that manages hot keys (keyboard shortcuts) and hot keys scopes in your application. It provides a context for managing different scopes of hot keys.
+The `HotKeysManager` is a Vue component that manages hot keys (keyboard shortcuts) and hot keys scopes in your application. It provides a context for managing different scopes of hot keys.
 
 ## Hot Keys Scope
 
 **Ez Hot Keys** manages hot keys in scopes. Each hot key is associated with a scope. Imagine your application has several features, you can register a hot keys scope for each feature, in this way, you can manage hot keys in each feature separately without worrying about duplicate hot keys in different features.
 
-You can register a hot keys scope with hooks: `useHotKeysScope`, `useHotKeys`.
+You can register a hot keys scope with composables: `useHotKeysScope`, `useHotKeys`.
 
 ## Active Scope
 
@@ -23,12 +23,12 @@ The active scope is the scope that is currently active. **Ez Hot Keys** will onl
 
 ## Global Hot Keys
 
-The global hot keys are hot keys that are not associated with any scope. They will be triggered if the active scope does not handle the hot key. You can register global hot keys with `useGlobalHotKeys` hook.
+The global hot keys are hot keys that are not associated with any scope. They will be triggered if the active scope does not handle the hot key. You can register global hot keys with `useGlobalHotKeys` composable.
 
 ## Sequences
 
 Sequences are hot keys that are triggered by pressing keys sequentially. For example, `ctrl` then `s` is a sequence.
-You can register sequences by using `_` as a separator in `hotKeys` option of `useHotKeysScope` hook.
+You can register sequences by using `_` as a separator in `hotKeys` option of `useHotKeysScope` composable.
 
 **Example:**
 
@@ -43,7 +43,7 @@ useHotKeysScope({
 ## Combinations
 
 Combinations are hot keys that are triggered by pressing multiple keys together. For example, `ctrl+s` is a combination.
-You can register combinations by using `+` as a separator in `hotKeys` option of `useHotKeysScope` hook.
+You can register combinations by using `+` as a separator in `hotKeys` option of `useHotKeysScope` composable.
 
 **Example:**
 

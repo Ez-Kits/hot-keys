@@ -1,6 +1,6 @@
 ---
 title: Concepts
-description: Concepts of Ez Hot Keys for React.
+description: Concepts of Ez Hot Keys for Solid.
 ---
 
 # Concepts
@@ -9,7 +9,7 @@ Before you start using **Ez Hot Keys**, you should understand the following conc
 
 ## Hot Keys Manager
 
-The `HotKeysManager` is a React component that manages hot keys (keyboard shortcuts) and hot keys scopes in your application. It provides a context for managing different scopes of hot keys.
+The `HotKeysManager` is a Solid component that manages hot keys (keyboard shortcuts) and hot keys scopes in your application. It provides a context for managing different scopes of hot keys.
 
 ## Hot Keys Scope
 

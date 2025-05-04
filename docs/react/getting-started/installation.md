@@ -28,7 +28,7 @@ All main features of **Ez Hot Keys** are available in the `HotKeysManager` compo
 
 ```tsx
 import { HotKeysManager } from "@ez-kits/hot-keys-react";
-import { createRoot, StrictMode } from "react";
+import { createRoot } from "react-dom/client";
 
 function App() {
 	return <div>My Application</div>;
@@ -36,11 +36,9 @@ function App() {
 
 const root = createRoot(document.getElementById("root") as HTMLElement);
 root.render(
-	<StrictMode>
-		<HotKeysManager>
-			<App />
-		</HotKeysManager>
-	</StrictMode>
+	<HotKeysManager>
+		<App />
+	</HotKeysManager>
 );
 ```
 
