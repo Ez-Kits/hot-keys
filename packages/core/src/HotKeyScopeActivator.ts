@@ -1,5 +1,5 @@
 import { HotKeysManagerInstance } from "src/HotKeysManagerInstance";
-import { IHotKeyScopeActivatorOptions } from "src/types";
+import type { IHotKeyScopeActivatorOptions } from "src/types";
 import { isServer } from "src/ultilities";
 
 export class HotKeyScopeActivator {

@@ -1,16 +1,22 @@
+import { EventListenersManager } from "src/EventListenersManager";
 import { normalizeHotKey } from "src/ultilities";
-import {
+import type {
 	IHotKeyInput,
 	IHotKeyNode,
 	IHotKeyScope,
+	IHotKeyScopeEvents,
 	IHotKeyScopeInstance,
 } from "./types";
 
-export class HotKeyScopeInstance implements IHotKeyScopeInstance {
+export class HotKeyScopeInstance
+	extends EventListenersManager<IHotKeyScopeEvents>
+	implements IHotKeyScopeInstance
+{
 	name: string;
 	private scope: IHotKeyScope;
 
 	constructor(name: string) {
+		super();
 		this.name = name;
 
 		const rootNode = { nodes: new Map() };
@@ -51,6 +57,9 @@ export class HotKeyScopeInstance implements IHotKeyScopeInstance {
 		if (typeof hotKeyInput === "function") {
 			node.handler = hotKeyInput;
 			node.hotKey = hotKey;
+			node.enabled = true;
+			node.ignoreInput = true;
+			node.repeatable = false;
 		} else {
 			node.hotKey = hotKey;
 			node.enabled = hotKeyInput.enabled;
@@ -58,6 +67,8 @@ export class HotKeyScopeInstance implements IHotKeyScopeInstance {
 			node.handler = hotKeyInput.handler;
 			node.repeatable = hotKeyInput.repeatable;
 		}
+
+		this.trigger("hot-keys:register", hotKey, hotKeyInput, this);
 	}
 
 	removeHotKey(hotKey: string): void {
@@ -98,11 +109,14 @@ export class HotKeyScopeInstance implements IHotKeyScopeInstance {
 			lastNode.nodes.delete(normalizedHotKey[i]!);
 
 			if (lastNode.nodes.size > 0) {
+				this.trigger("hot-keys:unregister", hotKey, this);
 				return;
 			}
 
 			lastNode = chain.pop()!;
 		}
+
+		this.trigger("hot-keys:unregister", hotKey, this);
 	}
 
 	searchNodeByHotKey(hotKey: string): IHotKeyNode | undefined {

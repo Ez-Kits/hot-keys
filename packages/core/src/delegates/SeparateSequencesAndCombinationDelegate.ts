@@ -1,9 +1,10 @@
-import { Logger } from "src/Logger";
-import {
-	HotKeyHandler,
+import { BaseDelegate } from "src/delegates/BaseDelegate";
+import type {
 	IHotKeyDelegate,
 	IHotKeyDelegateOptions,
+	IHotKeyInfo,
 	IHotKeyScopeInstance,
+	WithRequired,
 } from "src/types";
 import {
 	cloneHotKeyNode,
@@ -15,16 +16,15 @@ import {
 } from "src/ultilities";
 
 export class SeparateSequencesAndCombinationDelegate
-	extends Logger
+	extends BaseDelegate
 	implements IHotKeyDelegate
 {
 	private pressedKeys: string[] = [];
 	private activeScope: IHotKeyScopeInstance | undefined;
 	private repeatingHotKeyInfo:
-		| {
-				handler: HotKeyHandler;
-				hotKey: string;
-		  }
+		| (WithRequired<IHotKeyInfo, "handler" | "hotKey"> & {
+				scopeName: string;
+		  })
 		| undefined;
 
 	constructor(
@@ -62,12 +62,43 @@ export class SeparateSequencesAndCombinationDelegate
 		}
 
 		if (e.repeat) {
-			if (this.repeatingHotKeyInfo) {
-				return this.repeatingHotKeyInfo.handler(
-					this.repeatingHotKeyInfo.hotKey,
+			if (!this.repeatingHotKeyInfo) {
+				return;
+			}
+
+			if (this.repeatingHotKeyInfo.repeatable) {
+				this.repeatingHotKeyInfo.handler(this.repeatingHotKeyInfo.hotKey, e);
+				this.trigger(
+					"hot-keys:trigger",
+					{
+						hotKey: this.repeatingHotKeyInfo.hotKey,
+						ignoreInput: this.repeatingHotKeyInfo.ignoreInput ?? true,
+						enabled: this.repeatingHotKeyInfo.enabled ?? true,
+						repeatable: this.repeatingHotKeyInfo.repeatable ?? false,
+						scopeName: this.repeatingHotKeyInfo.scopeName,
+					},
 					e
 				);
+				return;
 			}
+
+			this.trigger(
+				"hot-keys:trigger-error",
+				{
+					hotKey: this.repeatingHotKeyInfo.hotKey,
+					ignoreInput: this.repeatingHotKeyInfo.ignoreInput ?? true,
+					enabled: this.repeatingHotKeyInfo.enabled ?? true,
+					repeatable: this.repeatingHotKeyInfo.repeatable ?? false,
+					scopeName: this.repeatingHotKeyInfo.scopeName,
+				},
+				e,
+				{
+					ignoreInput: false,
+					disabled: false,
+					repeat: true,
+				}
+			);
+
 			return;
 		}
 
@@ -93,10 +124,30 @@ export class SeparateSequencesAndCombinationDelegate
 		const node = chainNode || combinedNode;
 
 		if (node) {
-			if (
-				node.enabled === false ||
-				(node.ignoreInput !== false && isEditableElement(e.target))
-			) {
+			const mergedHotKey = node.hotKey || hotKey;
+			const isIgnoreInput =
+				node.ignoreInput !== false && isEditableElement(e.target);
+			const isDisabled = node.enabled === false;
+			if (isDisabled || isIgnoreInput) {
+				this.trigger(
+					"hot-keys:trigger-error",
+					{
+						hotKey: mergedHotKey,
+						ignoreInput: node.ignoreInput ?? true,
+						enabled: node.enabled ?? true,
+						repeatable: node.repeatable ?? false,
+						scopeName:
+							(activeScope === this.globalScope
+								? "EzHotKeys Global Scope"
+								: activeScope?.name) ?? "Unknown Scope",
+					},
+					e,
+					{
+						ignoreInput: isIgnoreInput,
+						disabled: isDisabled,
+						repeat: e.repeat,
+					}
+				);
 				return this.resetKeyboardEventState();
 			}
 
@@ -125,15 +176,32 @@ export class SeparateSequencesAndCombinationDelegate
 					e.preventDefault();
 				}
 
-				const retrievedHotKey = node.hotKey || hotKey;
-				node.handler(retrievedHotKey, e);
-
-				if (node.repeatable) {
-					this.repeatingHotKeyInfo = {
-						handler: node.handler,
-						hotKey: retrievedHotKey,
-					};
-				}
+				this.trigger(
+					"hot-keys:trigger",
+					{
+						hotKey: mergedHotKey,
+						ignoreInput: node.ignoreInput ?? true,
+						enabled: node.enabled ?? true,
+						repeatable: node.repeatable ?? false,
+						scopeName:
+							(activeScope === this.globalScope
+								? "EzHotKeys Global Scope"
+								: activeScope?.name) ?? "Unknown Scope",
+					},
+					e
+				);
+				node.handler(mergedHotKey, e);
+				this.repeatingHotKeyInfo = {
+					handler: node.handler,
+					hotKey: mergedHotKey,
+					repeatable: node.repeatable,
+					ignoreInput: node.ignoreInput ?? true,
+					enabled: node.enabled ?? true,
+					scopeName:
+						(activeScope === this.globalScope
+							? "EzHotKeys Global Scope"
+							: activeScope?.name) ?? "Unknown Scope",
+				};
 
 				if (node.nodes.size === 0) {
 					this.resetKeyboardEventState();
@@ -151,10 +219,27 @@ export class SeparateSequencesAndCombinationDelegate
 			const globalScopeNode = globalScopeChainNode || globalScopeCombinedNode;
 
 			if (globalScopeNode) {
-				if (
-					globalScopeNode.enabled === false ||
-					(globalScopeNode.ignoreInput !== false && isEditableElement(e.target))
-				) {
+				const mergedHotKey = globalScopeNode.hotKey || hotKey;
+				const isIgnoreInput =
+					globalScopeNode.ignoreInput !== false && isEditableElement(e.target);
+				const isDisabled = globalScopeNode.enabled === false;
+				if (isDisabled || isIgnoreInput) {
+					this.trigger(
+						"hot-keys:trigger-error",
+						{
+							hotKey: mergedHotKey,
+							ignoreInput: globalScopeNode.ignoreInput ?? true,
+							enabled: globalScopeNode.enabled ?? true,
+							repeatable: globalScopeNode.repeatable ?? false,
+							scopeName: "EzHotKeys Global Scope",
+						},
+						e,
+						{
+							ignoreInput: isIgnoreInput,
+							disabled: isDisabled,
+							repeat: e.repeat,
+						}
+					);
 					return this.resetKeyboardEventState();
 				}
 
@@ -183,14 +268,26 @@ export class SeparateSequencesAndCombinationDelegate
 						e.preventDefault();
 					}
 
-					const retrievedHotKey = globalScopeNode.hotKey || hotKey;
-					globalScopeNode.handler(retrievedHotKey, e);
-					if (globalScopeNode.repeatable) {
-						this.repeatingHotKeyInfo = {
-							handler: globalScopeNode.handler,
-							hotKey: retrievedHotKey,
-						};
-					}
+					this.trigger(
+						"hot-keys:trigger",
+						{
+							hotKey: mergedHotKey,
+							ignoreInput: globalScopeNode.ignoreInput ?? true,
+							enabled: globalScopeNode.enabled ?? true,
+							repeatable: globalScopeNode.repeatable ?? false,
+							scopeName: "EzHotKeys Global Scope",
+						},
+						e
+					);
+					globalScopeNode.handler(mergedHotKey, e);
+					this.repeatingHotKeyInfo = {
+						handler: globalScopeNode.handler,
+						hotKey: mergedHotKey,
+						repeatable: globalScopeNode.repeatable ?? false,
+						ignoreInput: globalScopeNode.ignoreInput ?? true,
+						enabled: globalScopeNode.enabled ?? true,
+						scopeName: "EzHotKeys Global Scope",
+					};
 
 					if (globalScopeNode.nodes.size === 0) {
 						this.resetKeyboardEventState();

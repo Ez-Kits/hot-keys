@@ -2,16 +2,21 @@ import {
 	SeparateSequencesAndCombinationDelegate,
 	UnifiedSequencesAndCombinationDelegate,
 } from "src/delegates";
+import { EventListenersManager } from "src/EventListenersManager";
 import { HotKeyScopeInstance } from "src/HotKeyScopeInstance";
-import {
+import type {
 	IHotKeyDelegate,
 	IHotKeyScopeInstance,
+	IHotKeysManagerEvents,
 	IHotKeysManagerInstance,
 	IHotKeysManagerOptions,
 } from "src/types";
 import { isServer } from "src/ultilities";
 
-export class HotKeysManagerInstance implements IHotKeysManagerInstance {
+export class HotKeysManagerInstance
+	extends EventListenersManager<IHotKeysManagerEvents>
+	implements IHotKeysManagerInstance
+{
 	private scopes: Map<string, IHotKeyScopeInstance>;
 	private eventAbortController: AbortController;
 	private delegate: IHotKeyDelegate;
@@ -20,6 +25,7 @@ export class HotKeysManagerInstance implements IHotKeysManagerInstance {
 	globalScope: IHotKeyScopeInstance;
 
 	constructor(public options: IHotKeysManagerOptions) {
+		super();
 		this.activeScope = undefined;
 		this.scopes = new Map();
 		this.globalScope = new HotKeyScopeInstance("__PRIVATE_GLOBAL_SCOPE__");
@@ -55,6 +61,13 @@ export class HotKeysManagerInstance implements IHotKeysManagerInstance {
 
 		const scope = new HotKeyScopeInstance(scopeName);
 		this.scopes.set(scopeName, scope);
+		this.trigger("scopes:register", scope);
+		scope.on("hot-keys:register", (hotKey, input, scope) => {
+			this.trigger("hot-keys:register", hotKey, input, scope);
+		});
+		scope.on("hot-keys:unregister", (hotKey, scope) => {
+			this.trigger("hot-keys:unregister", hotKey, scope);
+		});
 		return scope;
 	}
 
@@ -63,15 +76,18 @@ export class HotKeysManagerInstance implements IHotKeysManagerInstance {
 			const scope = this.scopes.get(scopeName)!;
 			if (scope.isEmptyHotKey()) {
 				this.scopes.delete(scopeName);
+				this.trigger("scopes:unregister", scope);
 			}
 		}
 	}
 
 	activateScope(scopeName: string): void {
 		this.activeScope = scopeName;
+		this.trigger("scopes:activate", this.getActiveScope());
 	}
 
 	deactivateScope(): void {
+		this.trigger("scopes:deactivate", this.getActiveScope());
 		this.activeScope = undefined;
 	}
 
@@ -85,10 +101,12 @@ export class HotKeysManagerInstance implements IHotKeysManagerInstance {
 
 	disable(): void {
 		this.options.enabled = false;
+		this.trigger("disabled");
 	}
 
 	enable(): void {
 		this.options.enabled = true;
+		this.trigger("enabled");
 	}
 
 	registerListener(): void {
@@ -139,17 +157,28 @@ export class HotKeysManagerInstance implements IHotKeysManagerInstance {
 
 	private getDelegate(): IHotKeyDelegate {
 		const mode = this.options.mode || "separate";
+		let delegate: IHotKeyDelegate;
 		if (mode === "separate") {
-			return new SeparateSequencesAndCombinationDelegate(
+			delegate = new SeparateSequencesAndCombinationDelegate(
+				this.globalScope,
+				this.options
+			);
+		} else {
+			delegate = new UnifiedSequencesAndCombinationDelegate(
 				this.globalScope,
 				this.options
 			);
 		}
 
-		return new UnifiedSequencesAndCombinationDelegate(
-			this.globalScope,
-			this.options
-		);
+		delegate.on("hot-keys:trigger", (hotKeyInfo, event) => {
+			this.trigger("hot-keys:trigger", hotKeyInfo, event);
+		});
+
+		delegate.on("hot-keys:trigger-error", (hotKeyInfo, event, reason) => {
+			this.trigger("hot-keys:trigger-error", hotKeyInfo, event, reason);
+		});
+
+		return delegate;
 	}
 
 	handleKeyDown = (e: KeyboardEvent): void => {
