@@ -45,6 +45,10 @@
 						{
 							"text": "Advanced Usage",
 							"slug": "/usage/advanced-usage"
+						},
+						{
+							"text": "Listen Events",
+							"slug": "/usage/listen-events"
 						}
 					]
 				},

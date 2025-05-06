@@ -1,4 +1,4 @@
-import type { IHotKeyNode } from "src/types";
+import type { IHotKeyInfo, IHotKeyInput, IHotKeyNode } from "src/types";
 
 export function debounce(fn: () => void, milliseconds: number) {
 	let timeoutId: NodeJS.Timeout | undefined;
@@ -155,4 +155,24 @@ export function debugLog(
 	console.group(colorCode + "[Ez Hot Keys] " + groupName + "\u001b[0m");
 	fn();
 	console.groupEnd();
+}
+
+export function normalizeHotKeyInput(
+	hotKeyInput: IHotKeyInput
+): Omit<IHotKeyInfo, "hotKey"> {
+	if (typeof hotKeyInput === "function") {
+		return {
+			handler: hotKeyInput,
+			enabled: true,
+			ignoreInput: true,
+			repeatable: false,
+		};
+	} else {
+		return {
+			enabled: hotKeyInput.enabled ?? true,
+			ignoreInput: hotKeyInput.ignoreInput ?? true,
+			handler: hotKeyInput.handler,
+			repeatable: hotKeyInput.repeatable ?? false,
+		};
+	}
 }

@@ -56,7 +56,7 @@ export interface IHotKeyScopeInstance
 export type IHotKeyScopeEvents = {
 	"hot-keys:register": [
 		hotKey: string,
-		input: IHotKeyInput,
+		hotKeyInfo: Omit<IHotKeyInfo, "hotKey">,
 		scope: IHotKeyScopeInstance
 	];
 	"hot-keys:unregister": [hotKey: string, scope: IHotKeyScopeInstance];

@@ -20,6 +20,7 @@ export class HotKeysManagerInstance
 	private scopes: Map<string, IHotKeyScopeInstance>;
 	private eventAbortController: AbortController;
 	private delegate: IHotKeyDelegate;
+	private enabled = true;
 
 	activeScope?: string;
 	globalScope: IHotKeyScopeInstance;
@@ -37,6 +38,8 @@ export class HotKeysManagerInstance
 		const isElementChanged =
 			options.getElement?.() !== this.options.getElement?.();
 		const isModeChanged = options.mode !== this.options.mode;
+
+		this.toggleEnableBaseOnOptions({ ...this.options }, options);
 
 		this.options = {
 			...this.options,
@@ -100,13 +103,28 @@ export class HotKeysManagerInstance
 	}
 
 	disable(): void {
-		this.options.enabled = false;
+		this.enabled = false;
 		this.trigger("disabled");
 	}
 
 	enable(): void {
-		this.options.enabled = true;
+		this.enabled = true;
 		this.trigger("enabled");
+	}
+
+	private toggleEnableBaseOnOptions(
+		oldOptions: IHotKeysManagerOptions,
+		newOptions: Partial<IHotKeysManagerOptions>
+	): void {
+		if (oldOptions.enabled === newOptions.enabled) {
+			return;
+		}
+
+		if (newOptions.enabled) {
+			this.enable();
+		} else {
+			this.disable();
+		}
 	}
 
 	registerListener(): void {
@@ -182,7 +200,7 @@ export class HotKeysManagerInstance
 	}
 
 	handleKeyDown = (e: KeyboardEvent): void => {
-		if (this.options.enabled === false) {
+		if (this.enabled === false) {
 			return;
 		}
 
@@ -191,7 +209,7 @@ export class HotKeysManagerInstance
 	};
 
 	handleKeyUp = (e: KeyboardEvent): void => {
-		if (this.options.enabled === false) {
+		if (this.enabled === false) {
 			return;
 		}
 

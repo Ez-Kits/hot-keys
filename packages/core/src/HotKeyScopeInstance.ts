@@ -1,5 +1,5 @@
 import { EventListenersManager } from "src/EventListenersManager";
-import { normalizeHotKey } from "src/ultilities";
+import { normalizeHotKey, normalizeHotKeyInput } from "src/ultilities";
 import type {
 	IHotKeyInput,
 	IHotKeyNode,
@@ -54,21 +54,15 @@ export class HotKeyScopeInstance
 			node = node.nodes.get(key)!;
 		}
 
-		if (typeof hotKeyInput === "function") {
-			node.handler = hotKeyInput;
-			node.hotKey = hotKey;
-			node.enabled = true;
-			node.ignoreInput = true;
-			node.repeatable = false;
-		} else {
-			node.hotKey = hotKey;
-			node.enabled = hotKeyInput.enabled;
-			node.ignoreInput = hotKeyInput.ignoreInput;
-			node.handler = hotKeyInput.handler;
-			node.repeatable = hotKeyInput.repeatable;
-		}
+		const normalizedHotKeyInput = normalizeHotKeyInput(hotKeyInput);
 
-		this.trigger("hot-keys:register", hotKey, hotKeyInput, this);
+		node.hotKey = hotKey;
+		node.enabled = normalizedHotKeyInput.enabled;
+		node.ignoreInput = normalizedHotKeyInput.ignoreInput;
+		node.handler = normalizedHotKeyInput.handler;
+		node.repeatable = normalizedHotKeyInput.repeatable;
+
+		this.trigger("hot-keys:register", hotKey, normalizedHotKeyInput, this);
 	}
 
 	removeHotKey(hotKey: string): void {
