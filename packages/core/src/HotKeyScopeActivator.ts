@@ -147,7 +147,12 @@ export class HotKeyScopeActivator {
 		element.addEventListener(
 			"focusout",
 			(event) => {
-				if (event.target === element) {
+				if (
+					event.target === element ||
+					!event.relatedTarget ||
+					(event.relatedTarget instanceof Node &&
+						!element.contains(event.relatedTarget))
+				) {
 					this.hotKeysManager.deactivateScope();
 				}
 			},
