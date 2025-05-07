@@ -14,6 +14,7 @@
 		"isolatedModules": true,
 		"strict": true,
 		"moduleResolution": "Bundler",
+		"verbatimModuleSyntax": true,
 		"emitDeclarationOnly": true,
 		"noEmit": false
 	},

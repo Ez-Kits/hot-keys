@@ -1,4 +1,4 @@
-import { IHotKeyNode } from "src/types";
+import type { IHotKeyInfo, IHotKeyInput, IHotKeyNode } from "src/types";
 
 export function debounce(fn: () => void, milliseconds: number) {
 	let timeoutId: NodeJS.Timeout | undefined;
@@ -136,4 +136,43 @@ export function isEditableElement(eventTarget: EventTarget | null): boolean {
 	}
 
 	return eventTarget.isContentEditable;
+}
+
+export function debugLog(
+	groupName: string,
+	color: "red" | "green" | "blue",
+	fn: () => void
+) {
+	let colorCode = "\u001b[0m";
+	if (color === "red") {
+		colorCode = "\u001b[31m";
+	} else if (color === "green") {
+		colorCode = "\u001b[32m";
+	} else if (color === "blue") {
+		colorCode = "\u001b[34m";
+	}
+
+	console.group(colorCode + "[Ez Hot Keys] " + groupName + "\u001b[0m");
+	fn();
+	console.groupEnd();
+}
+
+export function normalizeHotKeyInput(
+	hotKeyInput: IHotKeyInput
+): Omit<IHotKeyInfo, "hotKey"> {
+	if (typeof hotKeyInput === "function") {
+		return {
+			handler: hotKeyInput,
+			enabled: true,
+			ignoreInput: true,
+			repeatable: false,
+		};
+	} else {
+		return {
+			enabled: hotKeyInput.enabled ?? true,
+			ignoreInput: hotKeyInput.ignoreInput ?? true,
+			handler: hotKeyInput.handler,
+			repeatable: hotKeyInput.repeatable ?? false,
+		};
+	}
 }
