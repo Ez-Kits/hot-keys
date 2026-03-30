@@ -13,7 +13,11 @@ export function isServer(): boolean {
 	return typeof window === "undefined";
 }
 
-export function getKeyFromEvent(e: KeyboardEvent): string {
+export function getKeyFromEvent(e: KeyboardEvent | undefined): string {
+	if (!e) {
+		return "";
+	}
+
 	const keyCode = e.keyCode || e.which || e.charCode;
 
 	if (
@@ -21,6 +25,10 @@ export function getKeyFromEvent(e: KeyboardEvent): string {
 		(keyCode >= 97 && keyCode <= 122)
 	) {
 		return String.fromCharCode(keyCode).toLowerCase();
+	}
+
+	if (!e.key || typeof e.key !== "string") {
+		return "";
 	}
 
 	return e.key.length === 1 ? e.key.toLowerCase() : e.key.toLowerCase().trim();
@@ -60,7 +68,7 @@ export function normalizeHotKey(hotKey: string): string[] {
 			.split("+")
 			.map((y) => normalizeKey(y))
 			.sort()
-			.join("+")
+			.join("+"),
 	);
 }
 
@@ -97,7 +105,7 @@ export function cloneHotKeyNode<T extends IHotKeyNode | undefined>(node: T): T {
 			Array.from(node.nodes.entries()).map(([key, value]) => [
 				key,
 				cloneHotKeyNode(value),
-			])
+			]),
 		),
 	};
 }
@@ -141,7 +149,7 @@ export function isEditableElement(eventTarget: EventTarget | null): boolean {
 export function debugLog(
 	groupName: string,
 	color: "red" | "green" | "blue",
-	fn: () => void
+	fn: () => void,
 ) {
 	let colorCode = "\u001b[0m";
 	if (color === "red") {
@@ -158,7 +166,7 @@ export function debugLog(
 }
 
 export function normalizeHotKeyInput(
-	hotKeyInput: IHotKeyInput
+	hotKeyInput: IHotKeyInput,
 ): Omit<IHotKeyInfo, "hotKey"> {
 	if (typeof hotKeyInput === "function") {
 		return {

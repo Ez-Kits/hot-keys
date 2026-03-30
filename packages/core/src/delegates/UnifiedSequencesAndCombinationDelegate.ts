@@ -34,7 +34,7 @@ export class UnifiedSequencesAndCombinationDelegate
 
 	constructor(
 		private readonly globalScope: IHotKeyScopeInstance,
-		protected options: IHotKeyDelegateOptions
+		protected options: IHotKeyDelegateOptions,
 	) {
 		super(options);
 	}
@@ -56,7 +56,7 @@ export class UnifiedSequencesAndCombinationDelegate
 
 	private resetKeyboardEventStateDebounce = debounce(
 		() => this.resetKeyboardEventState(),
-		1000
+		1000,
 	);
 
 	handleKeyDown = (e: KeyboardEvent): void => {
@@ -80,7 +80,7 @@ export class UnifiedSequencesAndCombinationDelegate
 						repeatable: this.repeatingHotKeyInfo.repeatable ?? false,
 						scopeName: this.repeatingHotKeyInfo.scopeName,
 					},
-					e
+					e,
 				);
 				return;
 			}
@@ -99,7 +99,7 @@ export class UnifiedSequencesAndCombinationDelegate
 					ignoreInput: false,
 					disabled: false,
 					repeat: true,
-				}
+				},
 			);
 
 			return;
@@ -110,6 +110,10 @@ export class UnifiedSequencesAndCombinationDelegate
 
 		const lastKey = this.pressedKeys[this.pressedKeys.length - 1];
 		const normalizedKey = normalizeKey(getKeyFromEvent(e));
+		if (!normalizedKey) {
+			return;
+		}
+
 		if (lastKey !== normalizedKey) {
 			this.pressedKeys.push(normalizedKey);
 		}
@@ -148,7 +152,7 @@ export class UnifiedSequencesAndCombinationDelegate
 						ignoreInput: isIgnoreInput,
 						disabled: isDisabled,
 						repeat: e.repeat,
-					}
+					},
 				);
 				return this.resetKeyboardEventState();
 			}
@@ -160,11 +164,11 @@ export class UnifiedSequencesAndCombinationDelegate
 						"Active Scope",
 						activeScope === this.globalScope
 							? "EzHotKeys Global Scope"
-							: activeScope?.name
+							: activeScope?.name,
 					);
 					console.log(
 						"Root Node",
-						cloneHotKeyNode(activeScope?.getRootNode()!)
+						cloneHotKeyNode(activeScope?.getRootNode()!),
 					);
 					console.log("Node", node);
 					this.logKeyboardEventInfo(e);
@@ -189,7 +193,7 @@ export class UnifiedSequencesAndCombinationDelegate
 								? "EzHotKeys Global Scope"
 								: activeScope?.name) ?? "Unknown Scope",
 					},
-					e
+					e,
 				);
 				node.handler(mergedHotKey, e);
 				this.repeatingHotKeyInfo = {
@@ -232,7 +236,7 @@ export class UnifiedSequencesAndCombinationDelegate
 							ignoreInput: isIgnoreInput,
 							disabled: isDisabled,
 							repeat: e.repeat,
-						}
+						},
 					);
 					return this.resetKeyboardEventState();
 				}
@@ -244,11 +248,11 @@ export class UnifiedSequencesAndCombinationDelegate
 							"Active Scope",
 							activeScope === this.globalScope
 								? "EzHotKeys Global Scope"
-								: activeScope?.name
+								: activeScope?.name,
 						);
 						console.log(
 							"Root Node",
-							cloneHotKeyNode(this.globalScope.getRootNode())
+							cloneHotKeyNode(this.globalScope.getRootNode()),
 						);
 						console.log("Node", globalScopeNode);
 						this.logKeyboardEventInfo(e);
@@ -270,7 +274,7 @@ export class UnifiedSequencesAndCombinationDelegate
 							repeatable: globalScopeNode.repeatable ?? false,
 							scopeName: "EzHotKeys Global Scope",
 						},
-						e
+						e,
 					);
 					globalScopeNode.handler(mergedHotKey, e);
 					this.repeatingHotKeyInfo = {
@@ -294,7 +298,7 @@ export class UnifiedSequencesAndCombinationDelegate
 				"Active Scope",
 				activeScope === this.globalScope
 					? "EzHotKeys Global Scope"
-					: activeScope?.name
+					: activeScope?.name,
 			);
 			this.logKeyboardEventInfo(e);
 		});
@@ -302,7 +306,7 @@ export class UnifiedSequencesAndCombinationDelegate
 
 	private searchNodeByHotKey(
 		scope: IHotKeyScopeInstance,
-		hotKey: string
+		hotKey: string,
 	): IFlattenNode | undefined {
 		let currentNode = scope.getRootNode();
 
@@ -321,7 +325,7 @@ export class UnifiedSequencesAndCombinationDelegate
 
 	private flattenNodes(
 		node: IHotKeyNode,
-		prefix: string[] = []
+		prefix: string[] = [],
 	): IFlattenNode[] {
 		const nodes: IFlattenNode[] = [];
 		for (const [key, childNode] of node.nodes.entries()) {

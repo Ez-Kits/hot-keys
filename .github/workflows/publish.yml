@@ -3,6 +3,10 @@ name: Publish to NPM
 on:
   release:
     types: [created]
+permissions:
+  id-token: write # Required for OIDC
+  contents: read
+  packages: read
 
 jobs:
   publish:
@@ -14,7 +18,7 @@ jobs:
           fetch-depth: 0
       - uses: actions/setup-node@v3
         with:
-          node-version: 18
+          node-version: 24
           cache: yarn
           registry-url: "https://registry.npmjs.org"
 
@@ -26,5 +30,3 @@ jobs:
 
       - name: Publish
         run: yarn publish-packages ${{ github.ref_name }}
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}

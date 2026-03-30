@@ -29,7 +29,7 @@ export class SeparateSequencesAndCombinationDelegate
 
 	constructor(
 		private readonly globalScope: IHotKeyScopeInstance,
-		protected options: IHotKeyDelegateOptions
+		protected options: IHotKeyDelegateOptions,
 	) {
 		super(options);
 	}
@@ -53,7 +53,7 @@ export class SeparateSequencesAndCombinationDelegate
 
 	private resetKeyboardEventStateDebounce = debounce(
 		() => this.resetKeyboardEventState(),
-		1000
+		1000,
 	);
 
 	handleKeyDown = (e: KeyboardEvent): void => {
@@ -77,7 +77,7 @@ export class SeparateSequencesAndCombinationDelegate
 						repeatable: this.repeatingHotKeyInfo.repeatable ?? false,
 						scopeName: this.repeatingHotKeyInfo.scopeName,
 					},
-					e
+					e,
 				);
 				return;
 			}
@@ -96,7 +96,7 @@ export class SeparateSequencesAndCombinationDelegate
 					ignoreInput: false,
 					disabled: false,
 					repeat: true,
-				}
+				},
 			);
 
 			return;
@@ -107,6 +107,10 @@ export class SeparateSequencesAndCombinationDelegate
 
 		const lastKey = this.pressedKeys[this.pressedKeys.length - 1];
 		const normalizedKey = normalizeKey(getKeyFromEvent(e));
+		if (!normalizedKey) {
+			return;
+		}
+
 		if (lastKey !== normalizedKey) {
 			this.pressedKeys.push(normalizedKey);
 		}
@@ -146,7 +150,7 @@ export class SeparateSequencesAndCombinationDelegate
 						ignoreInput: isIgnoreInput,
 						disabled: isDisabled,
 						repeat: e.repeat,
-					}
+					},
 				);
 				return this.resetKeyboardEventState();
 			}
@@ -159,11 +163,11 @@ export class SeparateSequencesAndCombinationDelegate
 						"Active Scope",
 						activeScope === this.globalScope
 							? "EzHotKeys Global Scope"
-							: activeScope?.name
+							: activeScope?.name,
 					);
 					console.log(
 						"Root Node",
-						cloneHotKeyNode(activeScope?.getRootNode()!)
+						cloneHotKeyNode(activeScope?.getRootNode()!),
 					);
 					console.log("Node", node);
 					this.logKeyboardEventInfo(e);
@@ -188,7 +192,7 @@ export class SeparateSequencesAndCombinationDelegate
 								? "EzHotKeys Global Scope"
 								: activeScope?.name) ?? "Unknown Scope",
 					},
-					e
+					e,
 				);
 				node.handler(mergedHotKey, e);
 				this.repeatingHotKeyInfo = {
@@ -238,7 +242,7 @@ export class SeparateSequencesAndCombinationDelegate
 							ignoreInput: isIgnoreInput,
 							disabled: isDisabled,
 							repeat: e.repeat,
-						}
+						},
 					);
 					return this.resetKeyboardEventState();
 				}
@@ -251,11 +255,11 @@ export class SeparateSequencesAndCombinationDelegate
 							"Active Scope",
 							activeScope === this.globalScope
 								? "EzHotKeys Global Scope"
-								: activeScope?.name
+								: activeScope?.name,
 						);
 						console.log(
 							"Root Node",
-							cloneHotKeyNode(this.globalScope.getRootNode())
+							cloneHotKeyNode(this.globalScope.getRootNode()),
 						);
 						console.log("Node", globalScopeNode);
 						this.logKeyboardEventInfo(e);
@@ -277,7 +281,7 @@ export class SeparateSequencesAndCombinationDelegate
 							repeatable: globalScopeNode.repeatable ?? false,
 							scopeName: "EzHotKeys Global Scope",
 						},
-						e
+						e,
 					);
 					globalScopeNode.handler(mergedHotKey, e);
 					this.repeatingHotKeyInfo = {
@@ -305,7 +309,7 @@ export class SeparateSequencesAndCombinationDelegate
 				"Active Scope",
 				activeScope === this.globalScope
 					? "EzHotKeys Global Scope"
-					: activeScope?.name
+					: activeScope?.name,
 			);
 			console.log("Root Node", cloneHotKeyNode(activeScope?.getRootNode()!));
 			this.logKeyboardEventInfo(e);
@@ -314,7 +318,7 @@ export class SeparateSequencesAndCombinationDelegate
 
 	handleKeyUp = (e: KeyboardEvent): void => {
 		this.pressedKeys = this.pressedKeys.filter(
-			(x) => x !== normalizeKey(e.key)
+			(x) => x !== normalizeKey(e.key),
 		);
 
 		if (this.pressedKeys.length === 0) {
